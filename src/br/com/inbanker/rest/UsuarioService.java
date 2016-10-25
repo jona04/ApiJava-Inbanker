@@ -59,7 +59,14 @@ public class UsuarioService {
 	public Usuario buscarPorCpf(@PathParam("cpf") String cpf) {
 		Usuario usuario = null;
 		try {
-			usuario = daousuario.findUserCpf(cpf);
+			usuario = daousuario.findUserCpfTransacao(cpf);
+			
+			
+			if(usuario != null){
+				System.out.println(usuario.getTransacaoEnv());
+				System.out.println(usuario.getTransacaoEnv().size());
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -124,16 +131,16 @@ public class UsuarioService {
 	}	
 	
 	@POST
-	@Path("/editTransacao/{user1}")
+	@Path("/editTransacao/{user1}/{user2}")
 	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String editarTransacao(Transacao usu, @PathParam("user1") String cpf_user1) {
+	public String editarTransacao(Transacao usu, @PathParam("user1") String cpf_user1,@PathParam("user2") String cpf_user2) {
 		String msg = "";
 		
 		//System.out.println("mensagem para nos = "+usu.getUsu1());
 		
 		try {
-			daousuario.editarTransacao(usu, cpf_user1);
+			daousuario.editarTransacao(usu, cpf_user1,cpf_user2);
 			
 			msg = "sucesso_edit";
 		} catch (Exception e) {

@@ -40,16 +40,19 @@ public class UsuarioDAO{
           return null;
         }
 	
-	public Usuario findUserCpf(String cpf) {
+	public Usuario findUserCpfTransacao(String cpf) {
         Datastore datastore = Conexao.abrirConexao();
-        Query<Usuario> query = datastore
-        .createQuery(Usuario.class)
-        .field("cpf").equal(cpf);
-        List<Usuario> listUsuario = query.asList();
+        
+        Usuario query = datastore
+        .find(Usuario.class)
+        .field("cpf").equal(cpf)
+        .retrievedFields(true, "transacoes_enviadas").get();
+        
+        
         Conexao.fecharConexao(datastore);
 
-        if (listUsuario != null && !listUsuario.isEmpty())
-           return listUsuario.get(0);
+        if (query != null)
+           return query;
         else
           return null;
         }
@@ -81,15 +84,20 @@ public class UsuarioDAO{
 		Conexao.fecharConexao(datastore);
 	}
 	
-	public void editarTransacao(Transacao trans,String cpf_user1) {
+	public void editarTransacao(Transacao trans,String cpf_user1,String cpf_user2) {
 		Datastore datastore = Conexao.abrirConexao();
 		Query<Usuario> query_user1 = datastore.createQuery(Usuario.class)
 				.field("cpf").equal(cpf_user1);
-		//Query<Usuario> query_user2 = datastore.createQuery(Usuario.class).field("cpf").equal(cpf_user2);
+		Query<Usuario> query_user2 = datastore.createQuery(Usuario.class)
+				.field("cpf").equal(cpf_user2);
 		
-		UpdateOperations ops = datastore.createUpdateOperations(Usuario.class)
-				.add("transacoes", trans,false);
+		UpdateOperations ops = datastore.createUpdateOperations(Usuario.class).disableValidation()
+				.add("transacoes_enviadas", trans,false);
 		datastore.update(query_user1, ops);
+		
+		UpdateOperations ops2 = datastore.createUpdateOperations(Usuario.class).disableValidation()
+				.add("transacoes_recebidas", trans,false);
+		datastore.update(query_user2, ops2);
 		
 		
 		Conexao.fecharConexao(datastore);

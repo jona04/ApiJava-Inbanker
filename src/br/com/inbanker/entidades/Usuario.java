@@ -23,13 +23,19 @@ public class Usuario implements Serializable {
 	private String nome_face;
 	private String url_face;
 	
+    private List<Transacao> transacoes_enviadas;
+
+    public void setTransacaoEnv(List<Transacao> transacoes_enviadas){this.transacoes_enviadas = transacoes_enviadas;}
+    public List<Transacao> getTransacaoEnv(){return this.transacoes_enviadas;}
+
+    
  	@Embedded
     private List<Transacao> transacoes;
    
-	public List<Transacao> getTrans() {
+	public List<Transacao> getTransacao() {
 		return transacoes;
 	}
-	public void setTrans(List<Transacao> transacoes) {
+	public void setTransacao(List<Transacao> transacoes) {
 		this.transacoes = transacoes;
 	}
 	
