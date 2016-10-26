@@ -19,13 +19,23 @@ public class Transacao{
     private String data_pedido;
     private String nome_usu2;
     private String url_img_usu2;
+    private String nome_usu1;
+    private String url_img_usu1;
+    private String status_transacao;
     
-	public String getId() {
-		return id_trans;
+	public String getNome_usu1() {
+		return nome_usu1;
 	}
-	public void setId(String id) {
-		this.id_trans = id;
+	public void setNome_usu1(String nome_usu1) {
+		this.nome_usu1 = nome_usu1;
 	}
+	public String getUrl_img_usu1() {
+		return url_img_usu1;
+	}
+	public void setUrl_img_usu1(String url_img_usu1) {
+		this.url_img_usu1 = url_img_usu1;
+	}
+	
 	public String getCpf_usu1() {
 		return cpf_usu1;
 	}
@@ -67,6 +77,18 @@ public class Transacao{
 	}
 	public void setUrl_img_usu2(String url_img_usu2) {
 		this.url_img_usu2 = url_img_usu2;
+	}
+	public String getId_trans() {
+		return id_trans;
+	}
+	public void setId_trans(String id_trans) {
+		this.id_trans = id_trans;
+	}
+	public String getStatus_transacao() {
+		return status_transacao;
+	}
+	public void setStatus_transacao(String status_transacao) {
+		this.status_transacao = status_transacao;
 	}
     
     

@@ -53,19 +53,31 @@ public class UsuarioService {
 	}
 	
 	@GET
-	@Path("/findCpf/{cpf}")
+	@Path("/findCpfTransEnv/{cpf}")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON + CHARSET_UTF8)
-	public Usuario buscarPorCpf(@PathParam("cpf") String cpf) {
+	public Usuario buscarPorCpfEnv(@PathParam("cpf") String cpf) {
 		Usuario usuario = null;
 		try {
-			usuario = daousuario.findUserCpfTransacao(cpf);
+			usuario = daousuario.findUserCpfTransEnv(cpf);
 			
 			
-			if(usuario != null){
-				System.out.println(usuario.getTransacaoEnv());
-				System.out.println(usuario.getTransacaoEnv().size());
-			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return usuario;
+	}
+	
+	@GET
+	@Path("/findCpfTransRec/{cpf}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	public Usuario buscarPorCpfRec(@PathParam("cpf") String cpf) {
+		Usuario usuario = null;
+		try {
+			usuario = daousuario.findUserCpfTransRec(cpf);
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -131,16 +143,16 @@ public class UsuarioService {
 	}	
 	
 	@POST
-	@Path("/editTransacao/{user1}/{user2}")
+	@Path("/addTransacao/{user1}/{user2}")
 	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String editarTransacao(Transacao usu, @PathParam("user1") String cpf_user1,@PathParam("user2") String cpf_user2) {
+	public String addTransacao(Transacao usu, @PathParam("user1") String cpf_user1,@PathParam("user2") String cpf_user2) {
 		String msg = "";
 		
 		//System.out.println("mensagem para nos = "+usu.getUsu1());
 		
 		try {
-			daousuario.editarTransacao(usu, cpf_user1,cpf_user2);
+			daousuario.addTransacao(usu, cpf_user1,cpf_user2);
 			
 			msg = "sucesso_edit";
 		} catch (Exception e) {
@@ -151,6 +163,25 @@ public class UsuarioService {
 		return msg;
 	}	
 	
-	
+	@POST
+	@Path("/editTransacao/{user1}/{user2}")
+	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String editarTransacao(Transacao trans, @PathParam("user1") String cpf_user1,@PathParam("user2") String cpf_user2) {
+		String msg = "";
+		
+		//System.out.println("mensagem para nos = "+trans.getStatus_transacao());
+		
+		try {
+			daousuario.editarTransacao(trans, cpf_user1,cpf_user2);
+			
+			msg = "sucesso_edit";
+		} catch (Exception e) {
+			msg = "Erro ao editar a usuario!";
+			e.printStackTrace();
+		}
+		
+		return msg;
+	}	
 	
 }

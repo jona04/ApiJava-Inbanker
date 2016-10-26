@@ -24,14 +24,26 @@ public class Usuario implements Serializable {
 	private String url_face;
 	
     private List<Transacao> transacoes_enviadas;
-
-    public void setTransacaoEnv(List<Transacao> transacoes_enviadas){this.transacoes_enviadas = transacoes_enviadas;}
-    public List<Transacao> getTransacaoEnv(){return this.transacoes_enviadas;}
-
+    
+    private List<Transacao> transacoes_recebidas;
     
  	@Embedded
     private List<Transacao> transacoes;
    
+ 	public List<Transacao> getTransacoes_enviadas() {
+		return transacoes_enviadas;
+	}
+	public void setTransacoes_enviadas(List<Transacao> transacoes_enviadas) {
+		this.transacoes_enviadas = transacoes_enviadas;
+	}
+	
+ 	public List<Transacao> getTransacoes_recebidas() {
+		return transacoes_recebidas;
+	}
+	public void setTransacoes_recebidas(List<Transacao> transacoes_recebidas) {
+		this.transacoes_recebidas = transacoes_recebidas;
+	}
+
 	public List<Transacao> getTransacao() {
 		return transacoes;
 	}
@@ -88,5 +100,6 @@ public class Usuario implements Serializable {
 	public void setNome_face(String nome_face) {
 		this.nome_face = nome_face;
 	}
+	
 
 }

@@ -40,13 +40,29 @@ public class UsuarioDAO{
           return null;
         }
 	
-	public Usuario findUserCpfTransacao(String cpf) {
+	public Usuario findUserCpfTransEnv(String cpf) {
         Datastore datastore = Conexao.abrirConexao();
         
         Usuario query = datastore
         .find(Usuario.class)
         .field("cpf").equal(cpf)
         .retrievedFields(true, "transacoes_enviadas").get();
+        
+        
+        Conexao.fecharConexao(datastore);
+
+        if (query != null)
+           return query;
+        else
+          return null;
+        }
+	public Usuario findUserCpfTransRec(String cpf) {
+        Datastore datastore = Conexao.abrirConexao();
+        
+        Usuario query = datastore
+        .find(Usuario.class)
+        .field("cpf").equal(cpf)
+        .retrievedFields(true, "transacoes_recebidas").get();
         
         
         Conexao.fecharConexao(datastore);
@@ -84,7 +100,7 @@ public class UsuarioDAO{
 		Conexao.fecharConexao(datastore);
 	}
 	
-	public void editarTransacao(Transacao trans,String cpf_user1,String cpf_user2) {
+	public void addTransacao(Transacao trans,String cpf_user1,String cpf_user2) {
 		Datastore datastore = Conexao.abrirConexao();
 		Query<Usuario> query_user1 = datastore.createQuery(Usuario.class)
 				.field("cpf").equal(cpf_user1);
@@ -97,6 +113,27 @@ public class UsuarioDAO{
 		
 		UpdateOperations ops2 = datastore.createUpdateOperations(Usuario.class).disableValidation()
 				.add("transacoes_recebidas", trans,false);
+		datastore.update(query_user2, ops2);
+		
+		
+		Conexao.fecharConexao(datastore);
+	}
+	
+	public void editarTransacao(Transacao trans,String cpf_user1,String cpf_user2) {
+		Datastore datastore = Conexao.abrirConexao();
+		Query<Usuario> query_user1 = datastore.createQuery(Usuario.class)
+				.filter("cpf",cpf_user1)
+				.filter("transacoes_enviadas.id_trans",trans.getId_trans());
+		Query<Usuario> query_user2 = datastore.createQuery(Usuario.class)
+				.filter("cpf",cpf_user2)
+				.filter("transacoes_recebidas.id_trans",trans.getId_trans());
+		
+		UpdateOperations ops = datastore.createUpdateOperations(Usuario.class)
+				.set("transacoes_enviadas.$.status_transacao", trans.getStatus_transacao());
+		datastore.update(query_user1, ops);
+		
+		UpdateOperations ops2 = datastore.createUpdateOperations(Usuario.class)
+				.set("transacoes_recebidas.$.status_transacao", trans.getStatus_transacao());
 		datastore.update(query_user2, ops2);
 		
 		
