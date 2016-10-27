@@ -23,6 +23,7 @@ public class Transacao{
     private String url_img_usu1;
     private String status_transacao;
     private String data_recusada;
+    private String data_pagamento;
     
 	public String getNome_usu1() {
 		return nome_usu1;
@@ -96,6 +97,12 @@ public class Transacao{
 	}
 	public void setData_recusada(String data_recusada) {
 		this.data_recusada = data_recusada;
+	}
+	public String getData_pagamento() {
+		return data_pagamento;
+	}
+	public void setData_pagamento(String data_pagamento) {
+		this.data_pagamento = data_pagamento;
 	}
     
     

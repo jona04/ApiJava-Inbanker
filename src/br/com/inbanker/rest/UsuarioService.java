@@ -53,6 +53,37 @@ public class UsuarioService {
 	}
 	
 	@GET
+	@Path("/findUsuarioCpf/{cpf}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	public Usuario findUsuarioCpf(@PathParam("cpf") String cpf) {
+		Usuario usuario = null;
+		try {
+			usuario = daousuario.findUsuarioCpf(cpf);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return usuario;
+	}
+	
+	@GET
+	@Path("/verificaUsuarioCadastro/{cpf}/{email}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	public String verificaUsuarioCadastro(@PathParam("cpf") String cpf,@PathParam("email") String email) {
+		String result = null;
+		try {
+			result = daousuario.verificaUsuarioCadastro(cpf,email);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	
+	@GET
 	@Path("/findCpfTransEnv/{cpf}")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON + CHARSET_UTF8)
@@ -201,17 +232,18 @@ public class UsuarioService {
 		return msg;
 	}
 	
+	//para editar a data em que a transacao foi cancelada ou finalizada
 	@POST
-	@Path("/editTransacaoRecusada/{user1}/{user2}")
+	@Path("/editTransacaoResposta/{user1}/{user2}")
 	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String editarTransacaoRecusada(Transacao trans, @PathParam("user1") String cpf_user1,@PathParam("user2") String cpf_user2) {
+	public String editarTransacaoResposta(Transacao trans, @PathParam("user1") String cpf_user1,@PathParam("user2") String cpf_user2) {
 		String msg = "";
 		
 		//System.out.println("mensagem para nos = "+trans.getStatus_transacao());
 		
 		try {
-			daousuario.editarTransacaoRecusada(trans, cpf_user1,cpf_user2);
+			daousuario.editarTransacaoResposta(trans, cpf_user1,cpf_user2);
 			
 			msg = "sucesso_edit";
 		} catch (Exception e) {
