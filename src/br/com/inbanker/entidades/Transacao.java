@@ -22,6 +22,7 @@ public class Transacao{
     private String nome_usu1;
     private String url_img_usu1;
     private String status_transacao;
+    private String data_recusada;
     
 	public String getNome_usu1() {
 		return nome_usu1;
@@ -89,6 +90,12 @@ public class Transacao{
 	}
 	public void setStatus_transacao(String status_transacao) {
 		this.status_transacao = status_transacao;
+	}
+	public String getData_recusada() {
+		return data_recusada;
+	}
+	public void setData_recusada(String data_recusada) {
+		this.data_recusada = data_recusada;
 	}
     
     

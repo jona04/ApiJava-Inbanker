@@ -87,6 +87,23 @@ public class UsuarioService {
 	}
 	
 	@GET
+	@Path("/findCpfTransHistorico/{cpf}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	public Usuario buscarPorCpfHistorico(@PathParam("cpf") String cpf) {
+		Usuario usuario = null;
+		try {
+			usuario = daousuario.findUserCpfTransHistorico(cpf);
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return usuario;
+	}
+	
+	@GET
 	@Path("/findFace/{id}")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON + CHARSET_UTF8)
@@ -182,6 +199,27 @@ public class UsuarioService {
 		}
 		
 		return msg;
-	}	
+	}
+	
+	@POST
+	@Path("/editTransacaoRecusada/{user1}/{user2}")
+	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String editarTransacaoRecusada(Transacao trans, @PathParam("user1") String cpf_user1,@PathParam("user2") String cpf_user2) {
+		String msg = "";
+		
+		//System.out.println("mensagem para nos = "+trans.getStatus_transacao());
+		
+		try {
+			daousuario.editarTransacaoRecusada(trans, cpf_user1,cpf_user2);
+			
+			msg = "sucesso_edit";
+		} catch (Exception e) {
+			msg = "Erro ao editar a usuario!";
+			e.printStackTrace();
+		}
+		
+		return msg;
+	}
 	
 }
