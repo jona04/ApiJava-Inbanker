@@ -11,6 +11,15 @@ import org.mongodb.morphia.annotations.Id;
 @Embedded 
 public class Transacao{
 
+	//status da transacao
+    public static final int AGUARDANDO_RESPOSTA = 0;
+    public static final int PEDIDO_ACEITO = 1;
+    public static final int PEDIDO_RECUSADO = 2;
+    public static final int CONFIRMADO_RECEBIMENTO = 3;
+    public static final int QUITACAO_SOLICITADA = 4;
+    public static final int RESP_QUITACAO_SOLICITADA_RECUSADA = 5;
+    public static final int RESP_QUITACAO_SOLICITADA_CONFIRMADA = 6;
+    
     private String id_trans;
     private String cpf_usu1;
     private String cpf_usu2;

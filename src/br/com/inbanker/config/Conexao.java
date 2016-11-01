@@ -8,8 +8,8 @@ import com.mongodb.MongoClient;
 
 public class Conexao {
    
-    private static String IP_CONEXAO_MONGODB = "45.55.217.160:27017";
-	//private static String IP_CONEXAO_MONGODB = "127.0.0.1:27017";
+    //private static String IP_CONEXAO_MONGODB = "45.55.217.160:27017";
+	private static String IP_CONEXAO_MONGODB = "127.0.0.1:27017";
     private static String NOME_BANCO_MONGODB = "inbanker";
 
 	public static Datastore abrirConexao() {

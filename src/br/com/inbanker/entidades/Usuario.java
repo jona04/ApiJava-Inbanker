@@ -22,6 +22,8 @@ public class Usuario implements Serializable {
 	private String id_face;
 	private String nome_face;
 	private String url_face;
+	private String device_id;
+	private String token_gcm;
 	
     private List<Transacao> transacoes_enviadas;
     
@@ -99,6 +101,18 @@ public class Usuario implements Serializable {
 	}
 	public void setNome_face(String nome_face) {
 		this.nome_face = nome_face;
+	}
+	public String getDevice_id() {
+		return device_id;
+	}
+	public void setDevice_id(String device_id) {
+		this.device_id = device_id;
+	}
+	public String getToken_gcm() {
+		return token_gcm;
+	}
+	public void setToken_gcm(String token_gcm) {
+		this.token_gcm = token_gcm;
 	}
 	
 

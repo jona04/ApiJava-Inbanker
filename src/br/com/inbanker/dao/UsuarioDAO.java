@@ -156,6 +156,19 @@ public class UsuarioDAO{
 		Conexao.fecharConexao(datastore);
 	}
 	
+	public void updateTokenGcm(Usuario usu,String cpf) {
+		Datastore datastore = Conexao.abrirConexao();
+		Query<Usuario> query = datastore
+		        .createQuery(Usuario.class)
+		        .field("cpf").equal(cpf);
+		UpdateOperations ops = datastore
+			    .createUpdateOperations(Usuario.class)
+			    .set("device_id", usu.getDevice_id())
+			    .set("token_gcm", usu.getToken_gcm());
+		datastore.update(query, ops);
+		Conexao.fecharConexao(datastore);
+	}
+	
 	public void addTransacao(Transacao trans,String cpf_user1,String cpf_user2) {
 		Datastore datastore = Conexao.abrirConexao();
 		Query<Usuario> query_user1 = datastore.createQuery(Usuario.class)

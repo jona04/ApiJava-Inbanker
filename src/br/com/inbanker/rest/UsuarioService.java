@@ -15,7 +15,6 @@ import javax.ws.rs.core.MediaType;
 import br.com.inbanker.dao.UsuarioDAO;
 import br.com.inbanker.entidades.Transacao;
 import br.com.inbanker.entidades.Usuario;
-import br.com.inbanker.gcm.testGcm;
 
 @Path("/usuario")
 public class UsuarioService {
@@ -23,8 +22,6 @@ public class UsuarioService {
 	private static final String CHARSET_UTF8 = ";charset=utf-8";
 	
 	private UsuarioDAO daousuario = new UsuarioDAO();
-	private testGcm test = new testGcm();
-
 	
 	@GET
 	@Path("/list")
@@ -37,24 +34,6 @@ public class UsuarioService {
 			e.printStackTrace();
 		}
 		return lista;
-	}
-	
-	@GET
-	@Path("/gcmtest")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String gcmTest() {
-		String result = null;
-		
-		String deviceToken = "e7PjRhhbkW0:APA91bHxH29dmC77nmhh-oVWfo2w4vl62phOAmudQC_sMxED-XwNtYTAo_LC4rjZ97iSVPck2kXRRK_qTm8VK2rdP7awEj9hgaegdbTsAvyveiRy6KEcxXO8WG4WZDZfteCOiz5cLnCU";
-		String message = "teste api android oioio";
-		String title = "titulo notification";
-		
-		try {
-			result = test.sendAndroidNotification(deviceToken, message, title);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
 	}
 	
 	@GET
@@ -264,6 +243,27 @@ public class UsuarioService {
 		
 		try {
 			daousuario.editarTransacaoResposta(trans, cpf_user1,cpf_user2);
+			
+			msg = "sucesso_edit";
+		} catch (Exception e) {
+			msg = "Erro ao editar a usuario!";
+			e.printStackTrace();
+		}
+		
+		return msg;
+	}
+	
+	@POST
+	@Path("/updateTokenGcm/{cpf}")
+	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String updateTokenGcm(Usuario usu, @PathParam("cpf") String cpf) {
+		String msg = "";
+		
+		//System.out.println("mensagem para nos = "+trans.getStatus_transacao());
+		
+		try {
+			daousuario.updateTokenGcm(usu,cpf);
 			
 			msg = "sucesso_edit";
 		} catch (Exception e) {
