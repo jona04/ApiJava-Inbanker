@@ -2,6 +2,7 @@ package br.com.inbanker.gcm;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -16,8 +17,8 @@ public class GcmService {
 	
 	private testGcm test = new testGcm();
 	
-	@GET
-	@Path("/sendNotification/{tipo}/{token}")
+	@POST
+	@Path("/sendNotification/{token}")
 	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String gcmTest(Transacao trans,@PathParam("token") String token) {
@@ -26,31 +27,31 @@ public class GcmService {
 		String title = null;
 		String message = null;
 		
-		if(trans.getStatus_transacao().equals(Transacao.AGUARDANDO_RESPOSTA)){
-			title = "Solicitação de emprestimo";
-			message = "Você está recebendo um pedido de empréstimo de "+trans.getNome_usu1();
-		}else if(trans.getStatus_transacao().equals(Transacao.PEDIDO_ACEITO)){
+		if(trans.getStatus_transacao().equals(String.valueOf(Transacao.AGUARDANDO_RESPOSTA))){
+			title = "SolicitaÃ§Ã£o de emprestimo";
+			message = "VocÃª estÃ¡ recebendo um pedido de emprÃ©stimo de "+trans.getNome_usu1();
+		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.PEDIDO_ACEITO))){
 			title = "Resposta do emprestimo";
 			message = "Seu pedido de emprestimo foi aceito por "+trans.getNome_usu2();
-		}else if(trans.getStatus_transacao().equals(Transacao.PEDIDO_RECUSADO)){
+		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.PEDIDO_RECUSADO))){
 			title = "Resposta do emprestimo";
 			message = "Seu pedido de emprestimo foi recusado por "+trans.getNome_usu2();
-		}else if(trans.getStatus_transacao().equals(Transacao.CONFIRMADO_RECEBIMENTO)){
-			title = "Confirmação recebimento";
+		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.CONFIRMADO_RECEBIMENTO))){
+			title = "ConfirmaÃ§Ã£o recebimento";
 			message = "Seu amigo(a) "+trans.getNome_usu1()+" confirmou o recebimento do valor pedido para emprestimo.";
-		}else if(trans.getStatus_transacao().equals(Transacao.QUITACAO_SOLICITADA)){
-			title = "Solicitação de quitação";
-			message = "Seu amigo(a) "+trans.getNome_usu1()+" esta solicitando que você confirme a quitação do emprestimo pedido por ele.";
-		}else if(trans.getStatus_transacao().equals(Transacao.RESP_QUITACAO_SOLICITADA_CONFIRMADA)){
-			title = "Resposta de quitação";
-			message = "Seu amigo(a) "+trans.getNome_usu2()+" confirmou a solicitação de quitação de emprestimo que você enviou.";
-		}else if(trans.getStatus_transacao().equals(Transacao.RESP_QUITACAO_SOLICITADA_RECUSADA)){
-			title = "Resposta de quitação";
-			message = "Seu amigo(a) "+trans.getNome_usu2()+" recusou a solicitação de quitação de emprestimo que você enviou.";
+		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.QUITACAO_SOLICITADA))){
+			title = "SolicitaÃ§Ã£o de quitaÃ§Ã£o";
+			message = "Seu amigo(a) "+trans.getNome_usu1()+" esta solicitando que vocÃª confirme a quitaÃ§Ã£o do emprestimo pedido por ele.";
+		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.RESP_QUITACAO_SOLICITADA_CONFIRMADA))){
+			title = "Resposta de quitaÃ§Ã£o";
+			message = "Seu amigo(a) "+trans.getNome_usu2()+" confirmou a solicitaÃ§Ã£o de quitaÃ§Ã£o de emprestimo que vocÃª enviou.";
+		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.RESP_QUITACAO_SOLICITADA_RECUSADA))){
+			title = "Resposta de quitaÃ§Ã£o";
+			message = "Seu amigo(a) "+trans.getNome_usu2()+" recusou a solicitaÃ§Ã£o de quitaÃ§Ã£o de emprestimo que vocÃª enviou.";
 		}
 		
 		try {
-			result = test.sendAndroidNotification(token, message, title);
+			result = test.sendAndroidNotification(trans,token, message, title);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

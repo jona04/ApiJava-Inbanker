@@ -1,12 +1,6 @@
 package br.com.inbanker.entidades;
 
-import java.io.Serializable;
-import java.util.Random;
-
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
 
 @Embedded 
 public class Transacao{
