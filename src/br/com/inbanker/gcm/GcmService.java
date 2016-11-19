@@ -15,7 +15,7 @@ public class GcmService {
 
 	private static final String CHARSET_UTF8 = ";charset=utf-8";
 	
-	private testGcm test = new testGcm();
+	private GcmDao test = new GcmDao();
 	
 	@POST
 	@Path("/sendNotification/{token}")

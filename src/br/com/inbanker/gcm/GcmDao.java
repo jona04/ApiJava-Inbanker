@@ -17,7 +17,7 @@ import com.squareup.okhttp.Response;
 import br.com.inbanker.entidades.Transacao;
 
 
-public class testGcm {
+public class GcmDao {
 
 	private String ANDROID_NOTIFICATION_URL = "https://fcm.googleapis.com/fcm/send";
 	private String ANDROID_NOTIFICATION_KEY = "AIzaSyCanZDbePUY-kPT6Z2oZe1GCu2RMBeRHGk";

@@ -169,16 +169,36 @@ public class UsuarioService {
 	}
 	
 	@POST
-	@Path("/edit/{cpf}")
+	@Path("/editUserbyCPF/{cpf}")
 	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String editarUsuario(Usuario usu, @PathParam("cpf") String cpf) {
+	public String editarUsuariobyCPF(Usuario usu, @PathParam("cpf") String cpf) {
 		String msg = "";
 		
 		//System.out.println(usu.getNome() +" - "+usu.getId_face() +" -  "+cpf);
 		
 		try {
-			daousuario.editarUsuario(usu, cpf);
+			daousuario.editarUsuariobyCPF(usu, cpf);
+			
+			msg = "sucesso_edit";
+		} catch (Exception e) {
+			msg = "Erro ao editar a usuario!";
+			e.printStackTrace();
+		}
+		
+		return msg;
+	}	
+	@POST
+	@Path("/editUserbyFace/{id_face}")
+	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String editarUsuariobyFace(Usuario usu, @PathParam("id_face") String id_face) {
+		String msg = "";
+		
+		//System.out.println(usu.getNome() +" - "+usu.getId_face() +" -  "+cpf);
+		
+		try {
+			daousuario.editarUsuariobyFace(usu, id_face);
 			
 			msg = "sucesso_edit";
 		} catch (Exception e) {

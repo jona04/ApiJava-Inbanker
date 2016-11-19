@@ -142,7 +142,7 @@ public class UsuarioDAO{
           return null;
         }
 	
-	public void editarUsuario(Usuario usu,String cpf) {
+	public void editarUsuariobyCPF(Usuario usu,String cpf) {
 		Datastore datastore = Conexao.abrirConexao();
 		Query<Usuario> query = datastore
 		        .createQuery(Usuario.class)
@@ -152,6 +152,19 @@ public class UsuarioDAO{
 			    .set("id_face", usu.getId_face())
 			    .set("nome_face", usu.getNome_face())
 				.set("url_face", usu.getUrl_face());
+		datastore.update(query, ops);
+		Conexao.fecharConexao(datastore);
+	}
+	
+	public void editarUsuariobyFace(Usuario usu,String id_face) {
+		Datastore datastore = Conexao.abrirConexao();
+		Query<Usuario> query = datastore
+		        .createQuery(Usuario.class)
+		        .field("id_face").equal(id_face);
+		UpdateOperations ops = datastore
+			    .createUpdateOperations(Usuario.class)
+			    .set("cpf", usu.getCpf())
+			    .set("senha", usu.getSenha());
 		datastore.update(query, ops);
 		Conexao.fecharConexao(datastore);
 	}
