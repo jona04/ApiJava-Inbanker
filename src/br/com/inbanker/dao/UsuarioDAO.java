@@ -164,6 +164,8 @@ public class UsuarioDAO{
 		UpdateOperations ops = datastore
 			    .createUpdateOperations(Usuario.class)
 			    .set("cpf", usu.getCpf())
+			    .set("email", usu.getEmail())
+			    .set("nome", usu.getNome())
 			    .set("senha", usu.getSenha());
 		datastore.update(query, ops);
 		Conexao.fecharConexao(datastore);

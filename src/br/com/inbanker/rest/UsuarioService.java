@@ -195,7 +195,7 @@ public class UsuarioService {
 	public String editarUsuariobyFace(Usuario usu, @PathParam("id_face") String id_face) {
 		String msg = "";
 		
-		//System.out.println(usu.getNome() +" - "+usu.getId_face() +" -  "+cpf);
+		//System.out.println("id_face ="+id_face);
 		
 		try {
 			daousuario.editarUsuariobyFace(usu, id_face);
