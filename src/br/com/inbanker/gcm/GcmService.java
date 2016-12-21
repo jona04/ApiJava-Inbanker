@@ -15,7 +15,7 @@ public class GcmService {
 
 	private static final String CHARSET_UTF8 = ";charset=utf-8";
 	
-	private GcmDao test = new GcmDao();
+	private GcmDao gcm = new GcmDao();
 	
 	@POST
 	@Path("/sendNotification/{token}")
@@ -51,7 +51,7 @@ public class GcmService {
 		}
 		
 		try {
-			result = test.sendAndroidNotification(trans,token, message, title);
+			result = gcm.sendAndroidNotification("notificacao",trans,token, message, title);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

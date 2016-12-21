@@ -43,4 +43,18 @@
     <servlet-name>Jersey GCM Service</servlet-name>
     <url-pattern>/gcm/*</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>AloMundo</servlet-name>
+  	<servlet-class>br.com.inbanker.servlet.AloMundoServLet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>AloMundo</servlet-name>
+  	<url-pattern>/alo</url-pattern>
+  </servlet-mapping>
+  
+  <listener>
+		<listener-class>org.quartz.ee.servlet.QuartzInitializerListener</listener-class>
+	</listener>
+	
 </web-app>
