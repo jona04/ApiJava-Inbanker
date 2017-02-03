@@ -28,26 +28,32 @@ public class GcmService {
 		String message = null;
 		
 		if(trans.getStatus_transacao().equals(String.valueOf(Transacao.AGUARDANDO_RESPOSTA))){
-			title = "Solicitação de emprestimo";
+			title = "Solicitação de Empréstimo";
 			message = "Você está recebendo um pedido de empréstimo de "+trans.getNome_usu1();
 		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.PEDIDO_ACEITO))){
-			title = "Resposta do emprestimo";
-			message = "Seu pedido de emprestimo foi aceito por "+trans.getNome_usu2();
+			title = "Resposta do Emprestimo";
+			message = "Seu pedido de empréstimo foi aceito por "+trans.getNome_usu2();
 		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.PEDIDO_RECUSADO))){
-			title = "Resposta do emprestimo";
-			message = "Seu pedido de emprestimo foi recusado por "+trans.getNome_usu2();
+			title = "Resposta do Empréstimo";
+			message = "Seu pedido de empréstimo foi recusado por "+trans.getNome_usu2();
 		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.CONFIRMADO_RECEBIMENTO))){
-			title = "Confirmação recebimento";
-			message = "Seu amigo(a) "+trans.getNome_usu1()+" confirmou o recebimento do valor pedido para emprestimo.";
+			title = "Confirmação Recebimento";
+			message = "Seu amigo(a) "+trans.getNome_usu1()+" confirmou o recebimento do valor pedido para empréstimo.";
 		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.QUITACAO_SOLICITADA))){
-			title = "Solicitação de quitação";
-			message = "Seu amigo(a) "+trans.getNome_usu1()+" esta solicitando que você confirme a quitação do emprestimo pedido por ele.";
+			title = "Solicitação de Quitação";
+			message = "Seu amigo(a) "+trans.getNome_usu1()+" esta solicitando que você confirme a quitação do empréstimo pedido por ele.";
 		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.RESP_QUITACAO_SOLICITADA_CONFIRMADA))){
-			title = "Resposta de quitação";
-			message = "Seu amigo(a) "+trans.getNome_usu2()+" confirmou a solicitação de quitação de emprestimo que você enviou.";
+			title = "Resposta de Quitação";
+			message = "Seu amigo(a) "+trans.getNome_usu2()+" confirmou a solicitação de quitação de empréstimo que você enviou.";
 		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.RESP_QUITACAO_SOLICITADA_RECUSADA))){
-			title = "Resposta de quitação";
-			message = "Seu amigo(a) "+trans.getNome_usu2()+" recusou a solicitação de quitação de emprestimo que você enviou.";
+			title = "Resposta de Quitação";
+			message = "Seu amigo(a) "+trans.getNome_usu2()+" recusou a solicitação de quitação de empréstimo que você enviou.";
+		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.ENVIO_CANCELADO_ANTES_RESPOSTA))){
+			title = "Pedido Cancelado";
+			message = trans.getNome_usu2()+" cancelou o pedido de empréstimo que enviou a você.";
+		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.ENVIO_CANCELADO_ANTES_RECEBIMENTO))){
+			title = "Pedido Cancelado";
+			message =  trans.getNome_usu2()+" cancelou o pedido de empréstimo que enviou a você.";
 		}
 		
 		try {

@@ -49,9 +49,9 @@ public class UsuarioDAO{
         Conexao.fecharConexao(datastore);
 
         if (listUsuario != null && !listUsuario.isEmpty())
-           return listUsuario.get(0);
+        	return listUsuario.get(0);
         else
-          return null;
+        	return null;
         }
 	
 	public String verificaUsuarioCadastro(String cpf,String email) {
@@ -75,7 +75,7 @@ public class UsuarioDAO{
             if (listUsuario2 != null && !listUsuario2.isEmpty()){
             	return "email";
             }else{
-            	return null;
+            	return "vazio";
             }
         }    
 	}
@@ -142,7 +142,19 @@ public class UsuarioDAO{
           return null;
         }
 	
-	public void editarUsuariobyCPF(Usuario usu,String cpf) {
+	public void editarSenhaByCPF(Usuario usu,String cpf) {
+		Datastore datastore = Conexao.abrirConexao();
+		Query<Usuario> query = datastore
+		        .createQuery(Usuario.class)
+		        .field("cpf").equal(cpf);
+		UpdateOperations ops = datastore
+			    .createUpdateOperations(Usuario.class)
+			    .set("senha", usu.getSenha());
+		datastore.update(query, ops);
+		Conexao.fecharConexao(datastore);
+	}
+	
+	public void editarUsuarioByCPF(Usuario usu,String cpf) {
 		Datastore datastore = Conexao.abrirConexao();
 		Query<Usuario> query = datastore
 		        .createQuery(Usuario.class)
@@ -150,13 +162,14 @@ public class UsuarioDAO{
 		UpdateOperations ops = datastore
 			    .createUpdateOperations(Usuario.class)
 			    .set("id_face", usu.getId_face())
-			    .set("nome_face", usu.getNome_face())
-				.set("url_face", usu.getUrl_face());
+			    .set("nome", usu.getNome())
+				.set("url_face", usu.getUrl_face())
+				.set("email", usu.getEmail());
 		datastore.update(query, ops);
 		Conexao.fecharConexao(datastore);
 	}
 	
-	public void editarUsuariobyFace(Usuario usu,String id_face) {
+	public void editarUsuarioByFace(Usuario usu,String id_face) {
 		Datastore datastore = Conexao.abrirConexao();
 		Query<Usuario> query = datastore
 		        .createQuery(Usuario.class)
@@ -168,6 +181,15 @@ public class UsuarioDAO{
 			    .set("nome", usu.getNome())
 			    .set("senha", usu.getSenha());
 		datastore.update(query, ops);
+		Conexao.fecharConexao(datastore);
+	}
+	
+	public void deletaUsuFace(Usuario usu,String id_face) {
+		Datastore datastore = Conexao.abrirConexao();
+		Query<Usuario> query = datastore
+		        .createQuery(Usuario.class)
+		        .field("id_face").equal(id_face);
+		datastore.delete(query);
 		Conexao.fecharConexao(datastore);
 	}
 	

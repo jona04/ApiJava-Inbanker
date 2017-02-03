@@ -20,7 +20,6 @@ public class Usuario implements Serializable {
 	private String nascimento;
 	private String senha;
 	private String id_face;
-	private String nome_face;
 	private String url_face;
 	private String device_id;
 	private String token_gcm;
@@ -95,12 +94,6 @@ public class Usuario implements Serializable {
 	}
 	public void setUrl_face(String url_face) {
 		this.url_face = url_face;
-	}
-	public String getNome_face() {
-		return nome_face;
-	}
-	public void setNome_face(String nome_face) {
-		this.nome_face = nome_face;
 	}
 	public String getDevice_id() {
 		return device_id;

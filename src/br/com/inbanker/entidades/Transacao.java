@@ -13,6 +13,8 @@ public class Transacao{
     public static final int QUITACAO_SOLICITADA = 4;
     public static final int RESP_QUITACAO_SOLICITADA_RECUSADA = 5;
     public static final int RESP_QUITACAO_SOLICITADA_CONFIRMADA = 6;
+    public static final int ENVIO_CANCELADO_ANTES_RESPOSTA = 7;
+    public static final int ENVIO_CANCELADO_ANTES_RECEBIMENTO = 8;
     
     private String id_trans;
     private String cpf_usu1;

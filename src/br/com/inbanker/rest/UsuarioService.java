@@ -11,6 +11,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.Date;
 
 import br.com.inbanker.dao.UsuarioDAO;
 import br.com.inbanker.entidades.Transacao;
@@ -139,6 +145,7 @@ public class UsuarioService {
 	@Produces(MediaType.APPLICATION_JSON + CHARSET_UTF8)
 	public Usuario buscarPorIdFace(@PathParam("id") String id_face) {
 		Usuario usuario = null;
+		
 		try {
 			usuario = daousuario.findUserFace(id_face);
 		} catch (Exception e) {
@@ -169,7 +176,28 @@ public class UsuarioService {
 	}
 	
 	@POST
-	@Path("/editUserbyCPF/{cpf}")
+	@Path("/editSenhaByCPF/{cpf}")
+	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String editarSenhabyCPF(Usuario usu, @PathParam("cpf") String cpf) {
+		String msg = "";
+		
+		//System.out.println(usu.getNome() +" - "+usu.getId_face() +" -  "+cpf);
+		
+		try {
+			daousuario.editarSenhaByCPF(usu, cpf);
+			
+			msg = "sucesso_edit";
+		} catch (Exception e) {
+			msg = "Erro ao editar a usuario!";
+			e.printStackTrace();
+		}
+		
+		return msg;
+	}	
+	
+	@POST
+	@Path("/editUserByCPF/{cpf}")
 	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String editarUsuariobyCPF(Usuario usu, @PathParam("cpf") String cpf) {
@@ -178,7 +206,7 @@ public class UsuarioService {
 		//System.out.println(usu.getNome() +" - "+usu.getId_face() +" -  "+cpf);
 		
 		try {
-			daousuario.editarUsuariobyCPF(usu, cpf);
+			daousuario.editarUsuarioByCPF(usu, cpf);
 			
 			msg = "sucesso_edit";
 		} catch (Exception e) {
@@ -189,7 +217,7 @@ public class UsuarioService {
 		return msg;
 	}	
 	@POST
-	@Path("/editUserbyFace/{id_face}")
+	@Path("/editUserByFace/{id_face}")
 	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String editarUsuariobyFace(Usuario usu, @PathParam("id_face") String id_face) {
@@ -198,7 +226,7 @@ public class UsuarioService {
 		//System.out.println("id_face ="+id_face);
 		
 		try {
-			daousuario.editarUsuariobyFace(usu, id_face);
+			daousuario.editarUsuarioByFace(usu, id_face);
 			
 			msg = "sucesso_edit";
 		} catch (Exception e) {
@@ -208,6 +236,27 @@ public class UsuarioService {
 		
 		return msg;
 	}	
+	
+	/*@POST
+	@Path("/deletaUsuFace/{id_face}")
+	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String deletaUsuFace(Usuario usu, @PathParam("id_face") String id_face) {
+		String msg = "";
+		
+		//System.out.println("id_face ="+id_face);
+		
+		try {
+			daousuario.deletaUsuFace(usu, id_face);
+			
+			msg = "sucesso_edit";
+		} catch (Exception e) {
+			msg = "Erro ao editar a usuario!";
+			e.printStackTrace();
+		}
+		
+		return msg;
+	}	*/
 	
 	@POST
 	@Path("/addTransacao/{user1}/{user2}")
@@ -290,6 +339,42 @@ public class UsuarioService {
 			msg = "Erro ao editar a usuario!";
 			e.printStackTrace();
 		}
+		
+		return msg;
+	}
+	
+	@GET
+	@Path("/obterHora")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String obterHora() {
+		String msg = "";
+		
+		//System.out.println("mensagem para nos = "+trans.getStatus_transacao());
+		
+		try {
+			
+			Instant instant = Instant.now();
+			ZoneId fusoHorarioDeSaoPaulo = ZoneId.of("America/Sao_Paulo");
+			ZonedDateTime zdt = ZonedDateTime.ofInstant(instant,fusoHorarioDeSaoPaulo);
+			
+			/*System.out.println("BASIC_ISO_DATE: \t" + zdt.format(DateTimeFormatter.BASIC_ISO_DATE));
+	        System.out.println("ISO_LOCAL_DATE: \t" + zdt.format(DateTimeFormatter.ISO_LOCAL_DATE));
+	        System.out.println("ISO_OFFSET_DATE: \t" + zdt.format(DateTimeFormatter.ISO_OFFSET_DATE));
+	        System.out.println("ISO_DATE: \t\t" + zdt.format(DateTimeFormatter.ISO_DATE));
+	        System.out.println("ISO_LOCAL_TIME: \t" + zdt.format(DateTimeFormatter.ISO_LOCAL_TIME));
+	        System.out.println("ISO_OFFSET_TIME: \t" + zdt.format(DateTimeFormatter.ISO_OFFSET_TIME));
+	        System.out.println("ISO_TIME: \t\t" + zdt.format(DateTimeFormatter.ISO_TIME));
+	        System.out.println("ISO_LOCAL_DATE_TIME: \t" + zdt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));*/
+			
+			//acrescentamos o "Z" para ficar no formato padrao UTC do android e nao dar problema na conversao
+			msg = zdt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)+"Z";
+			
+		} catch (Exception e) {
+			msg = "error";
+			e.printStackTrace();
+		}
+		
+		System.out.println("DATETIME = " + msg);
 		
 		return msg;
 	}
