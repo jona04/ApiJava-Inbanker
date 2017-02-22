@@ -80,6 +80,51 @@ public class UsuarioDAO{
         }    
 	}
 	
+	public String verificaEmailCadastro(String email) {
+        Datastore datastore = Conexao.abrirConexao();
+        Query<Usuario> query = datastore
+        .createQuery(Usuario.class)
+        .field("email").equal(email);
+        List<Usuario> listUsuario = query.asList();
+        
+        //Conexao.fecharConexao(datastore);
+
+        if (listUsuario != null && !listUsuario.isEmpty())
+           return "email";
+        else
+        	return "vazio";
+	}
+	
+	public String verificaCPFCadastro(String cpf) {
+        Datastore datastore = Conexao.abrirConexao();
+        Query<Usuario> query = datastore
+        .createQuery(Usuario.class)
+        .field("cpf").equal(cpf);
+        List<Usuario> listUsuario = query.asList();
+        
+        //Conexao.fecharConexao(datastore);
+
+        if (listUsuario != null && !listUsuario.isEmpty())
+           return "cpf";
+        else
+        	return "vazio";
+	}
+	
+	public String verificaIdFace(String id_face) {
+        Datastore datastore = Conexao.abrirConexao();
+        Query<Usuario> query = datastore
+        .createQuery(Usuario.class)
+        .field("id_face").equal(id_face);
+        List<Usuario> listUsuario = query.asList();
+        
+        //Conexao.fecharConexao(datastore);
+
+        if (listUsuario != null && !listUsuario.isEmpty())
+           return "id_face";
+        else
+        	return "vazio";
+	}
+	
 	public Usuario findUserCpfTransEnv(String cpf) {
         Datastore datastore = Conexao.abrirConexao();
         

@@ -11,6 +11,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -80,6 +84,51 @@ public class UsuarioService {
 		String result = null;
 		try {
 			result = daousuario.verificaUsuarioCadastro(cpf,email);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	@GET
+	@Path("/verificaEmailCadastro/{email}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	public String verificaEmailCadastro(@PathParam("email") String email) {
+		String result = null;
+		try {
+			result = daousuario.verificaEmailCadastro(email);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	@GET
+	@Path("/verificaCPFCadastro/{cpf}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	public String verificaCPFCadastro(@PathParam("cpf") String cpf) {
+		String result = null;
+		try {
+			result = daousuario.verificaCPFCadastro(cpf);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	@GET
+	@Path("/verificaIdFace/{id_face}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	public String verificaIdFace(@PathParam("id_face") String id_face) {
+		String result = null;
+		try {
+			result = daousuario.verificaIdFace(id_face);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

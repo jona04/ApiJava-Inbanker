@@ -24,6 +24,11 @@ public class Usuario implements Serializable {
 	private String device_id;
 	private String token_gcm;
 	
+	private String idade;
+	private String sexo;
+	
+	private Endereco endereco;
+	
     private List<Transacao> transacoes_enviadas;
     
     private List<Transacao> transacoes_recebidas;
@@ -106,6 +111,24 @@ public class Usuario implements Serializable {
 	}
 	public void setToken_gcm(String token_gcm) {
 		this.token_gcm = token_gcm;
+	}
+	public String getIdade() {
+		return idade;
+	}
+	public void setIdade(String idade) {
+		this.idade = idade;
+	}
+	public String getSexo() {
+		return sexo;
+	}
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
+	public Endereco getEndereco() {
+		return endereco;
+	}
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
 	}
 	
 
