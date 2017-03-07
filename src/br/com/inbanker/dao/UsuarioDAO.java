@@ -280,11 +280,13 @@ public class UsuarioDAO{
 				.filter("transacoes_recebidas.id_trans",trans.getId_trans());
 		
 		UpdateOperations ops = datastore.createUpdateOperations(Usuario.class)
-				.set("transacoes_enviadas.$.status_transacao", trans.getStatus_transacao());
+				.set("transacoes_enviadas.$.status_transacao", trans.getStatus_transacao())
+				.set("transacoes_enviadas.$.historico", trans.getHistorico());
 		datastore.update(query_user1, ops);
 		
 		UpdateOperations ops2 = datastore.createUpdateOperations(Usuario.class)
-				.set("transacoes_recebidas.$.status_transacao", trans.getStatus_transacao());
+				.set("transacoes_recebidas.$.status_transacao", trans.getStatus_transacao())
+				.set("transacoes_recebidas.$.historico", trans.getHistorico());
 		datastore.update(query_user2, ops2);
 		
 		
@@ -303,15 +305,30 @@ public class UsuarioDAO{
 		UpdateOperations ops = datastore.createUpdateOperations(Usuario.class)
 				.set("transacoes_enviadas.$.status_transacao", trans.getStatus_transacao())
 				.set("transacoes_enviadas.$.data_recusada", trans.getData_recusada())
-				.set("transacoes_enviadas.$.data_pagamento", trans.getData_pagamento());
+				.set("transacoes_enviadas.$.data_pagamento", trans.getData_pagamento())
+				.set("transacoes_enviadas.$.historico", trans.getHistorico());
 		datastore.update(query_user1, ops);
 		
 		UpdateOperations ops2 = datastore.createUpdateOperations(Usuario.class)
 				.set("transacoes_recebidas.$.status_transacao", trans.getStatus_transacao())
 				.set("transacoes_recebidas.$.data_recusada", trans.getData_recusada())
-				.set("transacoes_recebidas.$.data_pagamento", trans.getData_pagamento());
+				.set("transacoes_recebidas.$.data_pagamento", trans.getData_pagamento())
+				.set("transacoes_recebidas.$.historico", trans.getHistorico());
 		datastore.update(query_user2, ops2);
 		
+		
+		Conexao.fecharConexao(datastore);
+	}
+	
+	
+	public void addCartaoUsuario(Usuario usuario,String cpf_user1) {
+		Datastore datastore = Conexao.abrirConexao();
+		Query<Usuario> query_user1 = datastore.createQuery(Usuario.class)
+				.filter("cpf",cpf_user1);
+		
+		UpdateOperations ops = datastore.createUpdateOperations(Usuario.class)
+				.set("cartao_pagamento", usuario.getCartaoPagamento());
+		datastore.update(query_user1, ops);
 		
 		Conexao.fecharConexao(datastore);
 	}

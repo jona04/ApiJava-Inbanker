@@ -27,16 +27,25 @@ public class Usuario implements Serializable {
 	private String idade;
 	private String sexo;
 	
+	@Embedded
 	private Endereco endereco;
 	
     private List<Transacao> transacoes_enviadas;
     
     private List<Transacao> transacoes_recebidas;
     
- 	@Embedded
-    private List<Transacao> transacoes;
-   
- 	public List<Transacao> getTransacoes_enviadas() {
+    @Embedded
+	private List<CartaoPagamento> cartao_pagamento;
+
+ 	
+ 	
+	public List<CartaoPagamento> getCartaoPagamento() {
+		return cartao_pagamento;
+	}
+	public void setCartaoPagamento(List<CartaoPagamento> cartaoPagamento) {
+		this.cartao_pagamento = cartaoPagamento;
+	}
+	public List<Transacao> getTransacoes_enviadas() {
 		return transacoes_enviadas;
 	}
 	public void setTransacoes_enviadas(List<Transacao> transacoes_enviadas) {
@@ -50,12 +59,6 @@ public class Usuario implements Serializable {
 		this.transacoes_recebidas = transacoes_recebidas;
 	}
 
-	public List<Transacao> getTransacao() {
-		return transacoes;
-	}
-	public void setTransacao(List<Transacao> transacoes) {
-		this.transacoes = transacoes;
-	}
 	
 	public String getId_face() {
 		return id_face;

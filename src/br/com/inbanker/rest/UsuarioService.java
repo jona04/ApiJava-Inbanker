@@ -372,6 +372,27 @@ public class UsuarioService {
 	}
 	
 	@POST
+	@Path("/addCartaoUsuario/{user1}")
+	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String addCartaoUsuario(Usuario usuario, @PathParam("user1") String cpf_user1) {
+		String msg = "";
+		
+		//System.out.println("mensagem para nos = "+trans.getStatus_transacao());
+		
+		try {
+			daousuario.addCartaoUsuario(usuario, cpf_user1);
+			
+			msg = "sucesso_edit";
+		} catch (Exception e) {
+			msg = "Erro ao editar a usuario!";
+			e.printStackTrace();
+		}
+		
+		return msg;
+	}
+	
+	@POST
 	@Path("/updateTokenGcm/{cpf}")
 	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
 	@Produces(MediaType.TEXT_PLAIN)

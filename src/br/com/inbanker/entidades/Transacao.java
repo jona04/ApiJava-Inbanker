@@ -1,5 +1,7 @@
 package br.com.inbanker.entidades;
 
+import java.util.List;
+
 import org.mongodb.morphia.annotations.Embedded;
 
 @Embedded 
@@ -30,6 +32,24 @@ public class Transacao{
     private String data_recusada;
     private String data_pagamento;
     
+    @Embedded
+    private List<Historico> historico;
+    
+    @Embedded
+    private RetornoPagamento pagamento;
+    
+	public RetornoPagamento getPagamento() {
+		return pagamento;
+	}
+	public void setPagamento(RetornoPagamento pagamento) {
+		this.pagamento = pagamento;
+	}
+	public List<Historico> getHistorico() {
+		return historico;
+	}
+	public void setHistorico(List<Historico> historico) {
+		this.historico = historico;
+	}
 	public String getNome_usu1() {
 		return nome_usu1;
 	}

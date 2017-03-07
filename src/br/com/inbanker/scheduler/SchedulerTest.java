@@ -26,7 +26,9 @@ public class SchedulerTest implements Job {
 			throws JobExecutionException {
 		//System.out.println("JSF 2 + Quartz 2 example");
 
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		//SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+		
 		Date hoje = Calendar.getInstance().getTime();
 		
 		List<Usuario> list = listUser();
@@ -42,8 +44,12 @@ public class SchedulerTest implements Job {
 					//System.out.println("Depois = "+list_result.getId_trans());
 					try {
 						
-						Date date = formatter.parse(list_result.getVencimento());
-			            //System.out.println(hoje +"--"+date);
+						
+						String str = list_result.getVencimento();
+						
+						Date date = format.parse(str);
+						
+			            System.out.println(hoje +"--"+date);
 						
 						if(hoje.after(date)){
 							System.out.println("Depois = "+list_result.getNome_usu1()+"-"+list_result.getVencimento());
