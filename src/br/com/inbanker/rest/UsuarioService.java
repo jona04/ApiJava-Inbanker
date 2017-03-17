@@ -23,6 +23,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import br.com.inbanker.dao.UsuarioDAO;
+import br.com.inbanker.email.SendEmail;
 import br.com.inbanker.entidades.Transacao;
 import br.com.inbanker.entidades.Usuario;
 
@@ -210,17 +211,18 @@ public class UsuarioService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String addUsu(Usuario usu) { 
 		String msg= "";
-		System.out.println("teste id = "+usu.getId_face());
+		//System.out.println("teste id = "+usu.getId_face());
 		
 		try {
 			daousuario.incluirUsuario(usu);
-
+			
 			msg = "sucesso";
+			
 		} catch (Exception e) {
 			msg = "Erro ao add a usuario!";
 			e.printStackTrace();
 		}
-
+		
 		return msg;
 	}
 	

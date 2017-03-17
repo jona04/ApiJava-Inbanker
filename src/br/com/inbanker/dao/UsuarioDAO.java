@@ -5,6 +5,7 @@ import java.util.List;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.*;
 import br.com.inbanker.config.Conexao;
+import br.com.inbanker.entidades.NotificacaoContrato;
 import br.com.inbanker.entidades.Transacao;
 import br.com.inbanker.entidades.Usuario;
 
@@ -306,6 +307,9 @@ public class UsuarioDAO{
 				.set("transacoes_enviadas.$.status_transacao", trans.getStatus_transacao())
 				.set("transacoes_enviadas.$.data_recusada", trans.getData_recusada())
 				.set("transacoes_enviadas.$.data_pagamento", trans.getData_pagamento())
+				.set("transacoes_enviadas.$.valor_juros_mensal", trans.getValor_juros_mensal())
+				.set("transacoes_enviadas.$.valor_juros_mora", trans.getValor_juros_mora())
+				.set("transacoes_enviadas.$.valor_multa", trans.getValor_multa())
 				.set("transacoes_enviadas.$.historico", trans.getHistorico());
 		datastore.update(query_user1, ops);
 		
@@ -313,6 +317,9 @@ public class UsuarioDAO{
 				.set("transacoes_recebidas.$.status_transacao", trans.getStatus_transacao())
 				.set("transacoes_recebidas.$.data_recusada", trans.getData_recusada())
 				.set("transacoes_recebidas.$.data_pagamento", trans.getData_pagamento())
+				.set("transacoes_recebidas.$.valor_juros_mensal", trans.getValor_juros_mensal())
+				.set("transacoes_recebidas.$.valor_juros_mora", trans.getValor_juros_mora())
+				.set("transacoes_recebidas.$.valor_multa", trans.getValor_multa())
 				.set("transacoes_recebidas.$.historico", trans.getHistorico());
 		datastore.update(query_user2, ops2);
 		
@@ -328,6 +335,18 @@ public class UsuarioDAO{
 		
 		UpdateOperations ops = datastore.createUpdateOperations(Usuario.class)
 				.set("cartao_pagamento", usuario.getCartaoPagamento());
+		datastore.update(query_user1, ops);
+		
+		Conexao.fecharConexao(datastore);
+	}
+	
+	public void addNotificacaoContrato(NotificacaoContrato nc) {
+		Datastore datastore = Conexao.abrirConexao();
+		Query<Usuario> query_user1 = datastore.createQuery(Usuario.class)
+				.filter("cpf",nc.getCpf_user());
+		
+		UpdateOperations ops = datastore.createUpdateOperations(Usuario.class).disableValidation()
+				.add("notificacao_contrato", nc,false);
 		datastore.update(query_user1, ops);
 		
 		Conexao.fecharConexao(datastore);

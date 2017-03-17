@@ -37,8 +37,17 @@ public class Usuario implements Serializable {
     @Embedded
 	private List<CartaoPagamento> cartao_pagamento;
 
+    @Embedded
+    private List<NotificacaoContrato> notificacao_contrato;
  	
- 	
+    
+    
+	public List<NotificacaoContrato> getNotificacaoContrato() {
+		return notificacao_contrato;
+	}
+	public void setNotificacaoContrato(List<NotificacaoContrato> notificacao_contrato) {
+		this.notificacao_contrato = notificacao_contrato;
+	}
 	public List<CartaoPagamento> getCartaoPagamento() {
 		return cartao_pagamento;
 	}

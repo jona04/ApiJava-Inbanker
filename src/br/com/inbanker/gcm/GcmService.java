@@ -50,10 +50,10 @@ public class GcmService {
 			message = "Seu amigo(a) "+trans.getNome_usu2()+" recusou a solicitação de quitação de empréstimo que você enviou.";
 		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.ENVIO_CANCELADO_ANTES_RESPOSTA))){
 			title = "Pedido Cancelado";
-			message = trans.getNome_usu2()+" cancelou o pedido de empréstimo que enviou a você.";
+			message = trans.getNome_usu1()+" cancelou o pedido de empréstimo que enviou a você.";
 		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.ENVIO_CANCELADO_ANTES_RECEBIMENTO))){
 			title = "Pedido Cancelado";
-			message =  trans.getNome_usu2()+" cancelou o pedido de empréstimo que enviou a você.";
+			message =  trans.getNome_usu1()+" cancelou o pedido de empréstimo que enviou a você.";
 		}
 		
 		try {
