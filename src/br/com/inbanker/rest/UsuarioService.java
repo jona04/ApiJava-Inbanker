@@ -24,6 +24,8 @@ import java.util.Date;
 
 import br.com.inbanker.dao.UsuarioDAO;
 import br.com.inbanker.email.SendEmail;
+import br.com.inbanker.entidades.Contrato;
+import br.com.inbanker.entidades.Recibo;
 import br.com.inbanker.entidades.Transacao;
 import br.com.inbanker.entidades.Usuario;
 
@@ -317,7 +319,7 @@ public class UsuarioService {
 		String msg = "";
 		
 		//System.out.println("mensagem para nos = "+usu.getUsu1());
-		
+
 		try {
 			daousuario.addTransacao(usu, cpf_user1,cpf_user2);
 			
@@ -337,14 +339,40 @@ public class UsuarioService {
 	public String editarTransacao(Transacao trans, @PathParam("user1") String cpf_user1,@PathParam("user2") String cpf_user2) {
 		String msg = "";
 		
-		//System.out.println("mensagem para nos = "+trans.getStatus_transacao());
+		System.out.println("mensagem para nos = "+trans.getStatus_transacao());
 		
 		try {
-			daousuario.editarTransacao(trans, cpf_user1,cpf_user2);
 			
-			msg = "sucesso_edit";
+			if(trans.getStatus_transacao().equals("3")){
+
+				//recibo de confirmacao vai ser o mesmo contrato
+				
+				//add contrato
+				Contrato contrato = new Contrato();
+				contrato.setId_trans(trans.getId_trans());
+				contrato.setCpf_usu1(trans.getCpf_usu1());
+				contrato.setCpf_usu2(trans.getCpf_usu2());
+				contrato.setValor(trans.getValor());
+				contrato.setVencimento(trans.getVencimento());
+				contrato.setData_pedido(trans.getData_pedido());
+				contrato.setData_confirma_recebimento(trans.getHistorico().get(trans.getHistorico().size()-1).getData());
+				contrato.setNome_usu2(trans.getNome_usu2());
+				contrato.setNome_usu1(trans.getNome_usu1());
+				String id_contrato = daousuario.addContrato(contrato);
+				
+				trans.setId_contrato(id_contrato);
+				
+				daousuario.editarTransacao(trans, cpf_user1,cpf_user2);
+				
+				msg = id_contrato;
+				
+			}else{
+				daousuario.editarTransacao(trans, cpf_user1,cpf_user2);
+				
+				msg = "sucesso_edit";
+			}
 		} catch (Exception e) {
-			msg = "Erro ao editar a usuario!";
+			msg = "error_edit_trans";
 			e.printStackTrace();
 		}
 		
@@ -359,14 +387,38 @@ public class UsuarioService {
 	public String editarTransacaoResposta(Transacao trans, @PathParam("user1") String cpf_user1,@PathParam("user2") String cpf_user2) {
 		String msg = "";
 		
-		//System.out.println("mensagem para nos = "+trans.getStatus_transacao());
+		System.out.println("mensagem para nos = "+trans.getStatus_transacao());
 		
 		try {
-			daousuario.editarTransacaoResposta(trans, cpf_user1,cpf_user2);
 			
-			msg = "sucesso_edit";
+			if(trans.getStatus_transacao().equals("6")){
+				
+				//add recibo confirmacao
+				Recibo recibo = new Recibo();
+				recibo.setId_trans(trans.getId_trans());
+				recibo.setCpf_usu1(trans.getCpf_usu1());
+				recibo.setCpf_usu2(trans.getCpf_usu2());
+				recibo.setValor(trans.getValor());
+				recibo.setVencimento(trans.getVencimento());
+				recibo.setData_pedido(trans.getData_pedido());
+				recibo.setData_confirma_quitacao((trans.getHistorico().get(trans.getHistorico().size()-1).getData()));
+				recibo.setNome_usu2(trans.getNome_usu2());
+				recibo.setNome_usu1(trans.getNome_usu1());
+				String id_recibo = daousuario.addRecibo(recibo);
+				
+				trans.setId_recibo(id_recibo);
+				
+				daousuario.editarTransacaoResposta(trans, cpf_user1,cpf_user2);
+				
+				msg = id_recibo;
+				
+			}else{
+				daousuario.editarTransacaoResposta(trans, cpf_user1,cpf_user2);
+				
+				msg = "sucesso_edit";
+			}
 		} catch (Exception e) {
-			msg = "Erro ao editar a usuario!";
+			msg = "error_edit_trans";
 			e.printStackTrace();
 		}
 		
@@ -447,6 +499,44 @@ public class UsuarioService {
 		}
 		
 		System.out.println("DATETIME = " + msg);
+		
+		return msg;
+	}
+	
+	@PUT
+	@Path("/addRecibo")
+	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String addRecibo(Recibo recibo) {
+		String msg = "";
+		
+		try {
+			msg = daousuario.addRecibo(recibo);
+			
+			//msg = "sucesso_edit_recibo";
+		} catch (Exception e) {
+			msg = "Erro ao adicionar recibo!";
+			e.printStackTrace();
+		}
+		
+		return msg;
+	}
+	
+	@PUT
+	@Path("/addContrato")
+	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String addContrato(Contrato contrato) {
+		String msg = "";
+		
+		try {
+			daousuario.addContrato(contrato);
+			
+			msg = "sucesso_edit_contrato";
+		} catch (Exception e) {
+			msg = "Erro ao adicionar contrato!";
+			e.printStackTrace();
+		}
 		
 		return msg;
 	}

@@ -1,10 +1,12 @@
 package br.com.inbanker.email;
 
+import br.com.inbanker.dao.UsuarioDAO;
 import br.com.inbanker.entidades.Transacao;
 import br.com.inbanker.entidades.Usuario;
 
 import java.security.Security;
 import java.util.Properties;
+import java.util.Random;
 
 import javax.mail.Address;
 import javax.mail.Message;
@@ -26,6 +28,109 @@ import javax.ws.rs.core.MediaType;
 public class SendEmail {
 	
 	private static final String CHARSET_UTF8 = ";charset=utf-8";
+	
+	@POST
+	@Path("/mensagem/{mensagem}")
+	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String sendEmailMensagem(Usuario usu,@PathParam("mensagem") String mensagem){
+		String resposta = null;
+		 try {
+			Properties props = new Properties();
+		
+			
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", "smtp.zoho.com");
+			props.put("mail.smtp.port", "587");
+			
+	        Session session = Session.getDefaultInstance(props,
+	                new javax.mail.Authenticator() {
+	                     protected PasswordAuthentication getPasswordAuthentication() 
+	                     {
+	                           return new PasswordAuthentication("no-reply@inbanker.com.br", "inbanker2016");
+	                     }
+	                });
+	        session.setDebug(true);
+       
+              Message message = new MimeMessage(session);
+              message.setFrom(new InternetAddress("no-reply@inbanker.com.br","InBanker F. Consulting")); //Remetente
+
+              Address[] toUser = InternetAddress //Destinatário(s)
+                         .parse("atendimento@inbanker.com.br");  
+              message.setRecipients(Message.RecipientType.TO, toUser);
+              
+              message.setContent(textEmailMensagem(mensagem,usu.getNome(),usu.getEmail(),usu.getCpf()), "text/html; charset=utf-8");
+              message.setSubject("Mensagem aplicativo Inbanker");//Assunto
+
+              Transport.send(message);
+              System.out.println("Feito!!!");
+              resposta = "feito";
+         } catch (Exception e) {
+        	 e.printStackTrace();
+        }
+       
+        return resposta;
+	}
+	
+	@POST
+	@Path("/novasenha")
+	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String sendEmailNovaSenha(Usuario usu){
+		String resposta = null;
+		
+		 String nova_senha = generateRandomString();
+		 String edit_senha = null;
+		 usu.setSenha(nova_senha);
+		 try{
+			 UsuarioDAO.novaSenhaUsuarioByCPF(usu);
+			 edit_senha = "ok";
+		 }catch(Exception e){
+			 
+		 }
+		
+		if(edit_senha == "ok"){
+			
+			 try {
+				
+				 Properties props = new Properties();
+				
+				
+				props.put("mail.smtp.auth", "true");
+				props.put("mail.smtp.starttls.enable", "true");
+				props.put("mail.smtp.host", "smtp.zoho.com");
+				props.put("mail.smtp.port", "587");
+				
+		        Session session = Session.getDefaultInstance(props,
+		                new javax.mail.Authenticator() {
+		                     protected PasswordAuthentication getPasswordAuthentication() 
+		                     {
+		                           return new PasswordAuthentication("no-reply@inbanker.com.br", "inbanker2016");
+		                     }
+		                });
+		        session.setDebug(true);
+	       
+	              Message message = new MimeMessage(session);
+	              message.setFrom(new InternetAddress("no-reply@inbanker.com.br","InBanker F. Consulting")); //Remetente
+	
+	              Address[] toUser = InternetAddress //Destinatário(s)
+	                         .parse(usu.getEmail());  
+	              message.setRecipients(Message.RecipientType.TO, toUser);
+	              
+	              message.setContent(textEmailNovaSenha(usu), "text/html; charset=utf-8");
+	              message.setSubject("Nova senha InBanker");//Assunto
+	
+	              Transport.send(message);
+	              System.out.println("Feito!!!");
+	              resposta = "feito";
+	        } catch (Exception e) {
+	        	 e.printStackTrace();
+	        }
+		}
+        return resposta;
+	}
+	
 	
 	@POST
 	@Path("/cadastro")
@@ -54,9 +159,6 @@ public class SendEmail {
 			props.put("mail.smtp.host", "smtp.zoho.com");
 			props.put("mail.smtp.port", "587");
 			
-
-			
-			 
 	        Session session = Session.getDefaultInstance(props,
 	                new javax.mail.Authenticator() {
 	                     protected PasswordAuthentication getPasswordAuthentication() 
@@ -66,21 +168,16 @@ public class SendEmail {
 	                });
 	        session.setDebug(true);
        
-
               Message message = new MimeMessage(session);
               message.setFrom(new InternetAddress("no-reply@inbanker.com.br","InBanker F. Consulting")); //Remetente
 
               Address[] toUser = InternetAddress //Destinatário(s)
                          .parse(usu.getEmail());  
               message.setRecipients(Message.RecipientType.TO, toUser);
-
+              
+              message.setContent(textEmailCadastro(usu.getNome()), "text/html; charset=utf-8");
               message.setSubject("Cadastro realizado no Inbanker");//Assunto
-              message.setText(
-            		  "Olá "+ usu.getNome() +"!\n "
-            		  + "\n Seu cadastro foi ralizado com sucesso."
-            		  + "\n Aproveite o InBanker!" 
-            		  + "\n\n Att.: Equipe InBanker" 
-            		  );
+
               Transport.send(message);
               System.out.println("Feito!!!");
               resposta = "feito";
@@ -88,7 +185,6 @@ public class SendEmail {
         	 e.printStackTrace();
         }
        
-        
         return resposta;
 	}
 	
@@ -105,9 +201,6 @@ public class SendEmail {
 			props.put("mail.smtp.host", "smtp.zoho.com");
 			props.put("mail.smtp.port", "587");
 			
-
-			
-			 
 	        Session session = Session.getDefaultInstance(props,
 	                new javax.mail.Authenticator() {
 	                     protected PasswordAuthentication getPasswordAuthentication() 
@@ -117,7 +210,6 @@ public class SendEmail {
 	                });
 	        session.setDebug(true);
        
-
               Message message_user1 = new MimeMessage(session);
               Message message_user2 = new MimeMessage(session);
               
@@ -131,15 +223,8 @@ public class SendEmail {
                   message_user1.setRecipients(Message.RecipientType.TO, toUser1);
       			
                   message_user1.setSubject("Você confirmou o recebimento do valor emprestado");//Assunto
-                  message_user1.setText(
-                		  "Olá "+ transacao.getNome_usu1() +"!\n "
-                		  + "\n Você confirmou o recebimento do valor de "+ transacao.getValor() +" solicitado ao " + transacao.getNome_usu2() + " pelo aplicativo InBanker."
-                		  + "\n Você deverá realizar o pagamento de quitação da dívida pessoalmente e fora do aplicativo InBanker, porém para validar e dar continuidade ao processo "
-                		  + "é necessário que seu amigo(a) " + transacao.getNome_usu2() + " confirme o recebimento do valor através do aplicativo"
-                		  + " para dar continuação a trasação." 
-                		  + "\n\n Att.: Equipe InBanker" 
-                		  
-                		  );
+                  message_user1.setContent(textEmailFormalizaContrato(transacao.getNome_usu1(), transacao.getNome_usu2(),transacao.getId_contrato()), "text/html; charset=utf-8");
+
                   /**Método para enviar a mensagem criada*/
                   Transport.send(message_user1);
                   
@@ -150,15 +235,8 @@ public class SendEmail {
                   message_user2.setRecipients(Message.RecipientType.TO, toUser2);
       			
                   message_user2.setSubject("Seu amigo confirmou recebimento do valor emprestado");//Assunto
-                  message_user2.setText(
-                		  "Olá "+ transacao.getNome_usu2() +"!\n "
-                		  + "\n Seu amigo(a) "+transacao.getNome_usu1()+" confirmou o recebimento do valor de "+ transacao.getValor() +" solicitado à você através do aplicativo InBanker."
-                		  + "\n Aguarde agora que ele realize a quitação do pedido de empréstimo."
-                		  + "\n Você deverá receber o valor de quitação da dívida pessoalmente e fora do aplicativo InBanker, porém para validar e dar continuidade ao processo é necessário que você"
-                		  + " confirme o recebimento do valor através do aplicativo."
-                		  + "\n\n Att.: Equipe InBanker" 
-                		  
-                		  );
+                  message_user2.setContent(textEmailFormalizaContrato(transacao.getNome_usu2(),transacao.getNome_usu1(),transacao.getId_contrato()), "text/html; charset=utf-8");
+
                   /**Método para enviar a mensagem criada*/
                   Transport.send(message_user2);
                   
@@ -174,15 +252,8 @@ public class SendEmail {
                   message_user1.setRecipients(Message.RecipientType.TO, toUser1);
       			
                   message_user1.setSubject("Seu amigo confirmou o recebimento do valor para quitação");//Assunto
-                  message_user1.setText(
-                		  "Olá "+ transacao.getNome_usu1() +"!\n "
-                		  + "\n Seu amigo confirmou o recebimento do valor de "+ transacao.getValor() +" para quitação do emprestimo solicitado por você"
-                		  + " através do aplicativo InBanker."
-                		  + "\n Portanto essa transação foi finalizada com sucesso."
-                		  + "Visualize os detalhes dessa e de outras transações finalizadas através do seu histórico no aplicativo InBanker." 
-                		  + "\n\n Att.: Equipe InBanker" 
-                		  
-                		  );
+                  message_user1.setContent(textEmailReciboFinalizado(transacao.getNome_usu1(),transacao.getNome_usu2(),transacao.getId_recibo(),transacao.getId_contrato()), "text/html; charset=utf-8");
+
                   /**Método para enviar a mensagem criada*/
                   Transport.send(message_user1);
                   
@@ -193,18 +264,10 @@ public class SendEmail {
                   message_user2.setRecipients(Message.RecipientType.TO, toUser2);
       			
                   message_user2.setSubject("Você confirmou o recebimento do valor para quitação");//Assunto
-                  message_user2.setText(
-                		  "Olá "+ transacao.getNome_usu2() +"!\n "
-                		  + "\n Você confirmou o recebimento do valor de "+ transacao.getValor() +" para quitação do emprestimo solicitado pelo seu amigo(a) "+ transacao.getNome_usu1()
-                		  + " através do aplicativo InBanker."
-                		  + "\n Portanto essa transação foi finalizada co sucesso."
-                		  + "Visualize os detalhes dessa e de outras transações finalizadas através do seu histórico no aplicativo InBanker." 
-                		  + "\n\n Att.: Equipe InBanker" 
-                		  
-                		  );
+                  message_user2.setContent(textEmailReciboFinalizado(transacao.getNome_usu2(),transacao.getNome_usu1(),transacao.getId_recibo(),transacao.getId_contrato()), "text/html; charset=utf-8");
+                  
                   /**Método para enviar a mensagem criada*/
                   Transport.send(message_user2);
-                  
               }
               
               System.out.println("Feito!!!");
@@ -217,7 +280,7 @@ public class SendEmail {
   
 	}
 	
-	@POST
+	/*@POST
 	@Path("/envioPedido/{email_user1}/{email_user2}")
 	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
 	@Produces(MediaType.TEXT_PLAIN)
@@ -261,7 +324,6 @@ public class SendEmail {
             		  + "\n\n Att.: Equipe InBanker" 
             		  
             		  );
-              /**Método para enviar a mensagem criada*/
               Transport.send(message_user1);
               
               message_user2.setFrom(new InternetAddress("no-reply@inbanker.com.br","InBanker F. Consulting")); //Remetente
@@ -278,7 +340,6 @@ public class SendEmail {
             		  + "\n\n Att.: Equipe InBanker" 
             		  
             		  );
-              /**Método para enviar a mensagem criada*/
               Transport.send(message_user2);
               
               resposta = "feito";
@@ -290,6 +351,173 @@ public class SendEmail {
         
         return resposta;
   
+	}*/
+	
+	public String textEmailCadastro(String nome){
+		
+		String texto ="<html>"
+			+"<body style='width: 500px;'>"
+			+"<h1 style='color:green' align='center'>Seja Bem Vind@!</h1>"
+			
+			+"<p>Olá, <strong>"+nome+"</strong>, tudo bem?</p>"
+			
+			+"<p>Você acabou de criar uma conta <strong>InBanker</strong>! Obrigado por se cadastrar no <strong>InBanker</strong>, o único sistema de ajuda mútua do Brasil.</p>"
+			
+			+"<p>Por ele, você poderá emprestar e solicitar empréstimos aos seus amigos, formalizando contratos de mútuo sempre com muita segurança e sem burocracia. </p>"
+			
+			+"<div style='border: solid gray;margin-top: 50px;padding: 5px'>"
+				+"<img src='https://s10.postimg.org/oclpysywp/Captura_de_Tela_2017_03_20_s_10_51_33.png' style='float: left; width:40px;padding:10px'>"
+				+"<p style=''>Mantenha sempre seus dados em segurança, não revele seus dados de acesso à ninguém. Nós nunca pediremos sua senha. Caso suspeite que alguém esteja usando sua conta, entre em contato conosco imediatamente.</p>"
+			+"</div>"
+			+"<p style='color: gray;font-size: 12x' align='center'>Esse email é automático e não deve ser respondido</p>"
+			+"</body>"
+			+"</html>";
+		
+		return texto;
+	} 
+	
+public String textEmailFormalizaContrato(String nome1,String nome2,String id_contrato){
+		
+		String texto ="<html>"
+			+"<body style='width: 500px;'>"
+			
+			+"<p>Olá, <strong>"+nome1+"</strong>, tudo bem?</p>"
+			
+			+"<p>Você e "+nome2+" formalizaram o Contrato de Mútuo através do nosso sistema <strong>InBanker</strong>.</p>"
+			
+			+"<p> <strong>ID Contrato: "+id_contrato+"</strong></p>"
+			
+			+"<p>Clique no link abaixo para visualizar o Contrato e o Comprovante de recebimento. </p>"
+			+"<p><a href='http://www.inbanker.com.br/contrato/"+id_contrato+"' target='_blank'>Contrato</a> <a href='http://www.inbanker.com.br/recibo/"+id_contrato+"' target='_blank'>Recibo</a></p>"
+			
+			+"<p>Acompanhe seu contrato pelo aplicativo ou site <a href='http://www.inbanker.com.br' target='_blank'>www.inbanker.com.br/login</a> e deixe conosco a administração do mesmo.</p>"
+			
+			+"<p>Alguma dúvida? <a href='http://www.inbanker.com.br' target='_blank'>Clique aqui</a>, ou entre em contato com a gente por e-mail, chat ou telefone.</p>"
+			
+			
+			+"<ul style='font-size: 14px;margin-top: 50px'> <strong>Informaçoes importantes: </strong>"
+				+"<li>Verifique os termos de uso e a política de privacidade da nossa empresa através do nosso site ou aplicativo.</li>"
+				+"<li>As obrigações geradas pelo contrato são válidas e podem acarretar em ação de cobrança judicial caso haja o atraso no pagamento da divida.</li>"
+			+"</ul>"
+			
+			+"<div style='border: solid gray;margin-top: 50px;padding: 5px'>"
+				+"<img src='https://s10.postimg.org/oclpysywp/Captura_de_Tela_2017_03_20_s_10_51_33.png' style='float: left; width:40px;padding:10px'>"
+				+"<p style=''>Mantenha sempre seus dados em segurança, não revele seus dados de acesso à ninguém. Nós nunca pediremos sua senha. Caso suspeite que alguém esteja usando sua conta, entre em contato conosco imediatamente.</p>"
+			+"</div>"
+			+"<p style='color: gray;font-size: 12x' align='center'>Esse email é automático e não deve ser respondido</p>"
+			+"</body>"
+			+"</html>";
+		
+		return texto;
+	} 
+
+	public String textEmailReciboFinalizado(String nome1,String nome2,String id_recibo,String id_contrato){
+		
+		String texto ="<html>"
+				+"<body style='width: 500px;'>"
+	
+				+"<p>Olá, <strong>"+nome1+"</strong>, tudo bem?</p>"
+	
+		+"<p>O Contrato de Mútuo com "+nome2+", foi quitado e finalizado através do nosso sistema <strong>InBanker</strong>.</p>"
+	
+		+"<p> <strong>Contrato: "+id_contrato+"</strong><br><strong>Recibo: "+id_recibo+"</strong></p>"
+	
+		+"<p>Clique no link abaixo para visualizar o Contrato e o Comprovante de quitacao. </p>"
+		+"<p><a href='http://www.inbanker.com.br/contrato/"+id_contrato+"' target='_blank'>Contrato</a> <a href='http://www.inbanker.com.br/recibo-quitacao/"+id_recibo+"' target='_blank'>Recibo</a></p>"
+		
+		+"<p>Acompanhe seu contrato pelo aplicativo ou site <a href='http://www.inbanker.com.br' target='_blank'>www.inbanker.com.br/login</a> e deixe conosco a administração do mesmo.</p>"
+		
+		+"<p>Alguma dúvida? <a href='http://www.inbanker.com.br' target='_blank'>Clique aqui</a>, ou entre em contato com a gente por e-mail, chat ou telefone.</p>"
+		
+		
+		+"<ul style='font-size: 14px;margin-top: 50px'> <strong>Informaçoes importantes: </strong>"
+			+"<li>Verifique os termos de uso e a política de privacidade da nossa empresa através do nosso site ou aplicativo.</li>"
+			+"<li>As obrigações geradas pelo contrato são válidas e podem acarretar em ação de cobrança judicial caso haja o atraso no pagamento da divida.</li>"
+		+"</ul>"
+		
+		+"<div style='border: solid gray;margin-top: 50px;padding: 5px'>"
+			+"<img src='https://s10.postimg.org/oclpysywp/Captura_de_Tela_2017_03_20_s_10_51_33.png' style='float: left; width:40px;padding:10px'>"
+			+"<p style=''>Mantenha sempre seus dados em segurança, não revele seus dados de acesso à ninguém. Nós nunca pediremos sua senha. Caso suspeite que alguém esteja usando sua conta, entre em contato conosco imediatamente.</p>"
+		+"</div>"
+		+"<p style='color: gray;font-size: 12x' align='center'>Esse email é automático e não deve ser respondido</p>"
+		+"</body>"
+		+"</html>";
+		
+		return texto;
+	} 
+	public String textEmailMensagem(String mensagem,String nome,String email,String cpf){
+		String texto ="<html>"
+				+"<body style='width: 500px;'>"
+	
+				+"<p>Enviado por: <strong>"+nome+"</strong></p>"
+				+"<p>CPF: <strong>"+cpf+"</strong></p>"
+				+"<p>Email: <strong>"+email+"</strong></p>"
+	
+		+"<p></p>"
+		+"<p>"+mensagem+"</p>"
+		+"<p></p>"
+	
+		
+		+"<p style='color: gray;font-size: 12x' align='center'>Esse foi enviado atraves do aplicativo inbanker</p>"
+		+"</body>"
+		+"</html>";
+		
+		return texto;
 	}
 	
+	private static final String CHAR_LIST =
+	        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+	    private static final int RANDOM_STRING_LENGTH = 10;
+	     
+    /**
+     * This method generates random string
+     * @return
+     */
+    public String generateRandomString(){
+         
+        StringBuffer randStr = new StringBuffer();
+        for(int i=0; i<RANDOM_STRING_LENGTH; i++){
+            int number = getRandomNumber();
+            char ch = CHAR_LIST.charAt(number);
+            randStr.append(ch);
+        }
+        return randStr.toString();
+    }
+    private int getRandomNumber() {
+        int randomInt = 0;
+        Random randomGenerator = new Random();
+        randomInt = randomGenerator.nextInt(CHAR_LIST.length());
+        if (randomInt - 1 == -1) {
+            return randomInt;
+        } else {
+            return randomInt - 1;
+        }
+    }
+	    
+	
+	public String textEmailNovaSenha(Usuario usu){
+		String texto ="<html>"
+				+"<body style='width: 500px;'>"
+	
+				+"<p>Olá, <strong>"+usu.getNome()+"</strong>, tudo bem?</p>"
+
+		+"<p></p>"
+	
+		+"<p>Foi solicitado uma nova senha através do aplicativo InBanker com o seu CPF.</p>"
+		+"<p>Nova senha:<strong>"+ usu.getSenha() +"</strong</p>"
+		
+		+"<p></p>"
+		+"<p>Recomendamos ao entrar no aplicativo, por questões de segurança, alterar a nova senha gerada.</p>"
+		
+		
+		+"<div style='border: solid gray;margin-top: 50px;padding: 5px'>"
+			+"<img src='https://s10.postimg.org/oclpysywp/Captura_de_Tela_2017_03_20_s_10_51_33.png' style='float: left; width:40px;padding:10px'>"
+			+"<p style=''>Mantenha sempre seus dados em segurança, não revele seus dados de acesso à ninguém. Nós nunca pediremos sua senha. Caso suspeite que alguém esteja usando sua conta, entre em contato conosco imediatamente.</p>"
+		+"</div>"
+		+"<p style='color: gray;font-size: 12x' align='center'>Esse email é automático e não deve ser respondido</p>"
+		+"</body>"
+		+"</html>";
+		
+		return texto;
+	}
 }

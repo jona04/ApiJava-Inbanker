@@ -5,7 +5,9 @@ import java.util.List;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.*;
 import br.com.inbanker.config.Conexao;
+import br.com.inbanker.entidades.Contrato;
 import br.com.inbanker.entidades.NotificacaoContrato;
+import br.com.inbanker.entidades.Recibo;
 import br.com.inbanker.entidades.Transacao;
 import br.com.inbanker.entidades.Usuario;
 
@@ -106,7 +108,7 @@ public class UsuarioDAO{
         //Conexao.fecharConexao(datastore);
 
         if (listUsuario != null && !listUsuario.isEmpty())
-           return "cpf";
+           return listUsuario.get(0).getCpf();
         else
         	return "vazio";
 	}
@@ -215,6 +217,18 @@ public class UsuarioDAO{
 		Conexao.fecharConexao(datastore);
 	}
 	
+	public static void novaSenhaUsuarioByCPF(Usuario usu) {
+		Datastore datastore = Conexao.abrirConexao();
+		Query<Usuario> query = datastore
+		        .createQuery(Usuario.class)
+		        .field("cpf").equal(usu.getCpf());
+		UpdateOperations ops = datastore
+			    .createUpdateOperations(Usuario.class)
+			    .set("senha", usu.getSenha());
+		datastore.update(query, ops);
+		Conexao.fecharConexao(datastore);
+	}
+	
 	public void editarUsuarioByFace(Usuario usu,String id_face) {
 		Datastore datastore = Conexao.abrirConexao();
 		Query<Usuario> query = datastore
@@ -282,12 +296,16 @@ public class UsuarioDAO{
 		
 		UpdateOperations ops = datastore.createUpdateOperations(Usuario.class)
 				.set("transacoes_enviadas.$.status_transacao", trans.getStatus_transacao())
-				.set("transacoes_enviadas.$.historico", trans.getHistorico());
+				.set("transacoes_enviadas.$.historico", trans.getHistorico())
+				.set("transacoes_enviadas.$.id_recibo", trans.getId_recibo())
+				.set("transacoes_enviadas.$.id_contrato", trans.getId_contrato());
 		datastore.update(query_user1, ops);
 		
 		UpdateOperations ops2 = datastore.createUpdateOperations(Usuario.class)
 				.set("transacoes_recebidas.$.status_transacao", trans.getStatus_transacao())
-				.set("transacoes_recebidas.$.historico", trans.getHistorico());
+				.set("transacoes_recebidas.$.historico", trans.getHistorico())
+				.set("transacoes_recebidas.$.id_recibo", trans.getId_recibo())
+				.set("transacoes_recebidas.$.id_contrato", trans.getId_contrato());
 		datastore.update(query_user2, ops2);
 		
 		
@@ -310,7 +328,9 @@ public class UsuarioDAO{
 				.set("transacoes_enviadas.$.valor_juros_mensal", trans.getValor_juros_mensal())
 				.set("transacoes_enviadas.$.valor_juros_mora", trans.getValor_juros_mora())
 				.set("transacoes_enviadas.$.valor_multa", trans.getValor_multa())
-				.set("transacoes_enviadas.$.historico", trans.getHistorico());
+				.set("transacoes_enviadas.$.historico", trans.getHistorico())
+				.set("transacoes_enviadas.$.id_recibo", trans.getId_recibo())
+				.set("transacoes_enviadas.$.id_contrato", trans.getId_contrato());
 		datastore.update(query_user1, ops);
 		
 		UpdateOperations ops2 = datastore.createUpdateOperations(Usuario.class)
@@ -320,7 +340,9 @@ public class UsuarioDAO{
 				.set("transacoes_recebidas.$.valor_juros_mensal", trans.getValor_juros_mensal())
 				.set("transacoes_recebidas.$.valor_juros_mora", trans.getValor_juros_mora())
 				.set("transacoes_recebidas.$.valor_multa", trans.getValor_multa())
-				.set("transacoes_recebidas.$.historico", trans.getHistorico());
+				.set("transacoes_recebidas.$.historico", trans.getHistorico())
+				.set("transacoes_recebidas.$.id_recibo", trans.getId_recibo())
+				.set("transacoes_recebidas.$.id_contrato", trans.getId_contrato());
 		datastore.update(query_user2, ops2);
 		
 		
@@ -350,5 +372,19 @@ public class UsuarioDAO{
 		datastore.update(query_user1, ops);
 		
 		Conexao.fecharConexao(datastore);
+	}
+	
+	public String addRecibo(Recibo recibo) {
+		Datastore datastore = Conexao.abrirConexao();
+		String recibo_id = datastore.save(recibo).getId().toString();
+		Conexao.fecharConexao(datastore);
+		return recibo_id;
+	}
+	
+	public String addContrato(Contrato contrato) {
+		Datastore datastore = Conexao.abrirConexao();
+		String contrato_id = datastore.save(contrato).getId().toString();
+		Conexao.fecharConexao(datastore);
+		return contrato_id;
 	}
 }

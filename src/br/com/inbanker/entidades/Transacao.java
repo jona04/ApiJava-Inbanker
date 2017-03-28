@@ -35,17 +35,26 @@ public class Transacao{
     private String status_transacao;
     private String data_recusada;
     private String data_pagamento;
+    private String id_recibo;
+    private String id_contrato;
     
-    @Embedded
+    public String getId_recibo() {
+		return id_recibo;
+	}
+	public void setId_recibo(String id_recibo) {
+		this.id_recibo = id_recibo;
+	}
+	public String getId_contrato() {
+		return id_contrato;
+	}
+	public void setId_contrato(String id_contrato) {
+		this.id_contrato = id_contrato;
+	}
+	@Embedded
     private List<Historico> historico;
     
     @Embedded
     private RetornoPagamento pagamento;
-    
-    
-    
-    
-	
     
 	public String getValor_juros_mora() {
 		return valor_juros_mora;
