@@ -58,7 +58,7 @@ public class SchedulerTest implements Job {
 							list_result.getStatus_transacao().equals(String.valueOf(Transacao.RESP_QUITACAO_SOLICITADA_RECUSADA))
 							){
 					
-						//list_trans.add(list_result);
+						System.out.println("cpf" +list_result.getId_trans());
 						
 						try {
 							
@@ -99,10 +99,10 @@ public class SchedulerTest implements Job {
 			            	System.out.println("dias vencimento = " +dias_para_vencimento);
 			            	if(dias_para_vencimento == 9){
 			            		
-			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo está em andamento. Faltam 9 dias para o vencimento.";
+			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo com "+ list_result.getNome_usu2() +" está em andamento. Faltam 9 dias para o vencimento.";
 			            		
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -118,10 +118,10 @@ public class SchedulerTest implements Job {
 			            	}else if(dias_para_vencimento == 5){
 			            		//mensagem de que falta 5 dias para vencimento
 			            		
-			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo está em andamento. Faltam 5 dias para o vencimento.";
+			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo com "+ list_result.getNome_usu2() +" está em andamento. Faltam 5 dias para o vencimento.";
 			            		
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -138,10 +138,10 @@ public class SchedulerTest implements Job {
 			            	}else if(dias_para_vencimento == 3){
 			            		//mensagem de que falta 9 dias para vencimento
 			            		
-			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo está em andamento. Faltam 3 dias para o vencimento.";
+			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo com "+ list_result.getNome_usu2() +" está em andamento. Faltam 3 dias para o vencimento.";
 			            		
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -157,10 +157,10 @@ public class SchedulerTest implements Job {
 			            	}else if(dias_para_vencimento == 0){
 			            		//mensagem de que falta 9 dias para vencimento
 			            		
-			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo vencerá hoje, faça o pagamento e evite multa e juros moratórios.";
+			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo com "+ list_result.getNome_usu2() +" vencerá hoje, faça o pagamento e evite multa e juros moratórios.";
 			            		
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -179,7 +179,7 @@ public class SchedulerTest implements Job {
 			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo venceu à 3 dias, seu amigo "+list_result.getNome_usu2()+" está à espera do pagamento.";
 			            		
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -196,7 +196,7 @@ public class SchedulerTest implements Job {
 			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo venceu à 5 dias, seu amigo "+list_result.getNome_usu2()+" está à espera do pagamento.";
 			            		
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -212,7 +212,7 @@ public class SchedulerTest implements Job {
 			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo venceu à 7 dias, seu amigo "+list_result.getNome_usu2()+" está à espera do pagamento.";
 			            		
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -228,7 +228,7 @@ public class SchedulerTest implements Job {
 			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo venceu à 10 dias, seu amigo "+list_result.getNome_usu2()+" está à espera do pagamento.";
 			            		
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -241,9 +241,9 @@ public class SchedulerTest implements Job {
 			            		UsuarioDAO usu_dao = new UsuarioDAO();
 			            		usu_dao.addNotificacaoContrato(nc);
 			            	}else if(dias_para_vencimento == -15){
-			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo venceu à 15 dias, não perca o controle financeiro, quite seu contrato.";
-			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo com "+ list_result.getNome_usu2() +" venceu à 15 dias, não perca o controle financeiro, quite seu contrato.";
+
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -256,9 +256,9 @@ public class SchedulerTest implements Job {
 			            		UsuarioDAO usu_dao = new UsuarioDAO();
 			            		usu_dao.addNotificacaoContrato(nc);
 			            	}else if(dias_para_vencimento == -20){
-			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo venceu à 20 dias, não perca o controle financeiro, quite seu contrato.";
+			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo com "+ list_result.getNome_usu2() +" venceu à 20 dias, não perca o controle financeiro, quite seu contrato.";
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -271,9 +271,9 @@ public class SchedulerTest implements Job {
 			            		UsuarioDAO usu_dao = new UsuarioDAO();
 			            		usu_dao.addNotificacaoContrato(nc);
 			            	}else if(dias_para_vencimento == -21){
-			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo venceu à 21 dias, não perca o controle financeiro, quite seu contrato.";
+			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo com "+ list_result.getNome_usu2() +" venceu à 21 dias, não perca o controle financeiro, quite seu contrato.";
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -286,9 +286,9 @@ public class SchedulerTest implements Job {
 			            		UsuarioDAO usu_dao = new UsuarioDAO();
 			            		usu_dao.addNotificacaoContrato(nc);
 			            	}else if(dias_para_vencimento == -25){
-			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo venceu à 25 dias, não perca o controle financeiro, quite seu contrato.";
+			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo com "+ list_result.getNome_usu2() +" venceu à 25 dias, não perca o controle financeiro, quite seu contrato.";
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -301,9 +301,9 @@ public class SchedulerTest implements Job {
 			            		UsuarioDAO usu_dao = new UsuarioDAO();
 			            		usu_dao.addNotificacaoContrato(nc);
 			            	}else if(dias_para_vencimento == -29){
-			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo venceu à 29 dias, não perca o controle financeiro, quite seu contrato.";
+			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo com "+ list_result.getNome_usu2() +" venceu à 29 dias, não perca o controle financeiro, quite seu contrato.";
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -316,9 +316,9 @@ public class SchedulerTest implements Job {
 			            		UsuarioDAO usu_dao = new UsuarioDAO();
 			            		usu_dao.addNotificacaoContrato(nc);
 			            	}else if(dias_para_vencimento == -30){
-			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo venceu à 30 dias, não perca o controle financeiro, quite seu contrato.";
+			            		mensagem = "Olá "+list_user.getNome()+", seu empréstimo com "+ list_result.getNome_usu2() +" venceu à 30 dias, não perca o controle financeiro, quite seu contrato.";
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -331,9 +331,9 @@ public class SchedulerTest implements Job {
 			            		UsuarioDAO usu_dao = new UsuarioDAO();
 			            		usu_dao.addNotificacaoContrato(nc);
 			            	}else if(dias_para_vencimento == -35){
-			            		mensagem = "Olá "+list_user.getNome()+", já passaram 35 dias do vencimento, evite a negativação do seu nome, quite seu contrato.";
+			            		mensagem = "Olá "+list_user.getNome()+", já passaram 35 dias do vencimento do empréstimo com "+ list_result.getNome_usu2() +", evite a negativação do seu nome, quite seu contrato.";
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -346,9 +346,9 @@ public class SchedulerTest implements Job {
 			            		UsuarioDAO usu_dao = new UsuarioDAO();
 			            		usu_dao.addNotificacaoContrato(nc);
 			            	}else if(dias_para_vencimento == -40){
-			            		mensagem = "Olá "+list_user.getNome()+", já passaram 40 dias do vencimento, evite a negativação do seu nome, quite seu contrato.";
+			            		mensagem = "Olá "+list_user.getNome()+", já passaram 40 dias do vencimento do empréstimo com "+ list_result.getNome_usu2() +", evite a negativação do seu nome, quite seu contrato.";
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -361,9 +361,9 @@ public class SchedulerTest implements Job {
 			            		UsuarioDAO usu_dao = new UsuarioDAO();
 			            		usu_dao.addNotificacaoContrato(nc);
 			            	}else if(dias_para_vencimento == -45){
-			            		mensagem = "Olá "+list_user.getNome()+", já passaram 45 dias do vencimento, evite a negativação do seu nome, quite seu contrato.";
+			            		mensagem = "Olá "+list_user.getNome()+", já passaram 45 dias do vencimento do empréstimo com "+ list_result.getNome_usu2() +", evite a negativação do seu nome, quite seu contrato.";
 			            		//mensagem de que falta 9 dias para vencimento
-			            		mensagemGcm(list_result.getNome_usu2(),list_user.getToken_gcm(),list_result);
+			            		mensagemGcm(list_user.getToken_gcm(),list_result,mensagem);
 			            		
 			            		//add no banco a mensagem de notificacao
 			            		NotificacaoContrato nc = new NotificacaoContrato();
@@ -391,10 +391,10 @@ public class SchedulerTest implements Job {
 		
 	}
 	
-	public void mensagemGcm(String nome_user2,String token_user1,Transacao trans){
+	public void mensagemGcm(String token_user1,Transacao trans,String msg){
 		System.out.println("envio mensagem");
-		String message = "Voce esta devendo o(a) "+nome_user2;
-		String title = "Voce tem uma conta em atraso";
+		String message = msg;
+		String title = "Você possui uma notificação InBanker";
 		
 		try{
 			String resposta = gcm.sendAndroidNotification("divida",trans,token_user1, message, title);

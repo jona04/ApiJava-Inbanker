@@ -1,5 +1,8 @@
 package br.com.inbanker.dao;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.mongodb.morphia.Datastore;
@@ -202,6 +205,24 @@ public class UsuarioDAO{
 		Conexao.fecharConexao(datastore);
 	}
 	
+	public void editarEnderecoByCPF(Usuario usu,String cpf) {
+		Datastore datastore = Conexao.abrirConexao();
+		Query<Usuario> query = datastore
+		        .createQuery(Usuario.class)
+		        .field("cpf").equal(cpf);
+		UpdateOperations ops = datastore
+			    .createUpdateOperations(Usuario.class)
+			    .set("endereco.cep", usu.getEndereco().getCep())
+			    .set("endereco.numero", usu.getEndereco().getNumero())
+			    .set("endereco.logradouro", usu.getEndereco().getLogradouro())
+			    .set("endereco.complemento", usu.getEndereco().getComplemento())
+			    .set("endereco.bairro", usu.getEndereco().getBairro())
+			    .set("endereco.cidade", usu.getEndereco().getCidade())
+			    .set("endereco.estado", usu.getEndereco().getEstado());
+		datastore.update(query, ops);
+		Conexao.fecharConexao(datastore);
+	}
+	
 	public void editarUsuarioByCPF(Usuario usu,String cpf) {
 		Datastore datastore = Conexao.abrirConexao();
 		Query<Usuario> query = datastore
@@ -212,7 +233,22 @@ public class UsuarioDAO{
 			    .set("id_face", usu.getId_face())
 			    .set("nome", usu.getNome())
 				.set("url_face", usu.getUrl_face())
-				.set("email", usu.getEmail());
+				.set("email", usu.getEmail())
+				.set("sexo", usu.getSexo())
+				.set("idade", usu.getIdade());
+		datastore.update(query, ops);
+		Conexao.fecharConexao(datastore);
+	}
+	
+	public void editarUsuarioByCPFFace(Usuario usu,String cpf) {
+		Datastore datastore = Conexao.abrirConexao();
+		Query<Usuario> query = datastore
+		        .createQuery(Usuario.class)
+		        .field("cpf").equal(cpf);
+		UpdateOperations ops = datastore
+			    .createUpdateOperations(Usuario.class)
+			    .set("id_face", usu.getId_face())
+				.set("url_face", usu.getUrl_face());
 		datastore.update(query, ops);
 		Conexao.fecharConexao(datastore);
 	}
@@ -349,6 +385,41 @@ public class UsuarioDAO{
 		Conexao.fecharConexao(datastore);
 	}
 	
+	public void editarTransacaoRespostaCancela(Transacao trans,String cpf_user1,String cpf_user2) {
+		Datastore datastore = Conexao.abrirConexao();
+		Query<Usuario> query_user1 = datastore.createQuery(Usuario.class)
+				.filter("cpf",cpf_user1)
+				.filter("transacoes_enviadas.id_trans",trans.getId_trans());
+		Query<Usuario> query_user2 = datastore.createQuery(Usuario.class)
+				.filter("cpf",cpf_user2)
+				.filter("transacoes_recebidas.id_trans",trans.getId_trans());
+		
+		UpdateOperations ops = datastore.createUpdateOperations(Usuario.class)
+				.set("transacoes_enviadas.$.status_transacao", trans.getStatus_transacao())
+				.set("transacoes_enviadas.$.data_recusada", trans.getData_recusada())
+				.set("transacoes_enviadas.$.data_pagamento", trans.getData_pagamento())
+				.set("transacoes_enviadas.$.valor_juros_mensal", trans.getValor_juros_mensal())
+				.set("transacoes_enviadas.$.valor_juros_mora", trans.getValor_juros_mora())
+				.set("transacoes_enviadas.$.valor_multa", trans.getValor_multa())
+				.set("transacoes_enviadas.$.historico", trans.getHistorico())
+				.set("transacoes_enviadas.$.id_recibo", trans.getId_recibo());
+		datastore.update(query_user1, ops);
+		
+		UpdateOperations ops2 = datastore.createUpdateOperations(Usuario.class)
+				.set("transacoes_recebidas.$.status_transacao", trans.getStatus_transacao())
+				.set("transacoes_recebidas.$.data_recusada", trans.getData_recusada())
+				.set("transacoes_recebidas.$.data_pagamento", trans.getData_pagamento())
+				.set("transacoes_recebidas.$.valor_juros_mensal", trans.getValor_juros_mensal())
+				.set("transacoes_recebidas.$.valor_juros_mora", trans.getValor_juros_mora())
+				.set("transacoes_recebidas.$.valor_multa", trans.getValor_multa())
+				.set("transacoes_recebidas.$.historico", trans.getHistorico())
+				.set("transacoes_recebidas.$.id_recibo", trans.getId_recibo());
+		datastore.update(query_user2, ops2);
+		
+		
+		Conexao.fecharConexao(datastore);
+	}
+	
 	
 	public void addCartaoUsuario(Usuario usuario,String cpf_user1) {
 		Datastore datastore = Conexao.abrirConexao();
@@ -387,4 +458,5 @@ public class UsuarioDAO{
 		Conexao.fecharConexao(datastore);
 		return contrato_id;
 	}
+	
 }

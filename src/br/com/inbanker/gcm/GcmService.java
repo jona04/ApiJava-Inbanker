@@ -31,7 +31,7 @@ public class GcmService {
 			title = "Solicitação de Empréstimo";
 			message = "Você está recebendo um pedido de empréstimo de "+trans.getNome_usu1();
 		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.PEDIDO_ACEITO))){
-			title = "Resposta do Emprestimo";
+			title = "Resposta do Empréstimo";
 			message = "Seu pedido de empréstimo foi aceito por "+trans.getNome_usu2();
 		}else if(trans.getStatus_transacao().equals(String.valueOf(Transacao.PEDIDO_RECUSADO))){
 			title = "Resposta do Empréstimo";

@@ -216,6 +216,9 @@ public class UsuarioService {
 		//System.out.println("teste id = "+usu.getId_face());
 		
 		try {
+			
+			usu.setAdicionado_em(obterHora());
+			
 			daousuario.incluirUsuario(usu);
 			
 			msg = "sucesso";
@@ -250,6 +253,27 @@ public class UsuarioService {
 	}	
 	
 	@POST
+	@Path("/editEnderecoByCPF/{cpf}")
+	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String editarEnderecobyCPF(Usuario usu, @PathParam("cpf") String cpf) {
+		String msg = "";
+		
+		//System.out.println(usu.getNome() +" - "+usu.getId_face() +" -  "+cpf);
+		
+		try {
+			daousuario.editarEnderecoByCPF(usu, cpf);
+			
+			msg = "sucesso_edit";
+		} catch (Exception e) {
+			msg = "Erro ao editar a usuario!";
+			e.printStackTrace();
+		}
+		
+		return msg;
+	}	
+	
+	@POST
 	@Path("/editUserByCPF/{cpf}")
 	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
 	@Produces(MediaType.TEXT_PLAIN)
@@ -260,6 +284,26 @@ public class UsuarioService {
 		
 		try {
 			daousuario.editarUsuarioByCPF(usu, cpf);
+			
+			msg = "sucesso_edit";
+		} catch (Exception e) {
+			msg = "Erro ao editar a usuario!";
+			e.printStackTrace();
+		}
+		
+		return msg;
+	}	
+	@POST
+	@Path("/editUserByCPFFace/{cpf}")
+	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String editarUsuariobyCPFFace(Usuario usu, @PathParam("cpf") String cpf) {
+		String msg = "";
+		
+		//System.out.println(usu.getNome() +" - "+usu.getId_face() +" -  "+cpf);
+		
+		try {
+			daousuario.editarUsuarioByCPFFace(usu, cpf);
 			
 			msg = "sucesso_edit";
 		} catch (Exception e) {
@@ -413,7 +457,7 @@ public class UsuarioService {
 				msg = id_recibo;
 				
 			}else{
-				daousuario.editarTransacaoResposta(trans, cpf_user1,cpf_user2);
+				daousuario.editarTransacaoRespostaCancela(trans, cpf_user1,cpf_user2);
 				
 				msg = "sucesso_edit";
 			}

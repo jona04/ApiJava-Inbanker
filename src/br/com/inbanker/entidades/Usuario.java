@@ -27,6 +27,8 @@ public class Usuario implements Serializable {
 	private String idade;
 	private String sexo;
 	
+	private String adicionado_em;
+	
 	@Embedded
 	private Endereco endereco;
 	
@@ -141,6 +143,12 @@ public class Usuario implements Serializable {
 	}
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
+	}
+	public String getAdicionado_em() {
+		return adicionado_em;
+	}
+	public void setAdicionado_em(String adicionado_em) {
+		this.adicionado_em = adicionado_em;
 	}
 	
 

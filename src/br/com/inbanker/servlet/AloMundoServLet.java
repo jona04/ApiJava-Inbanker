@@ -2,6 +2,9 @@ package br.com.inbanker.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 import javax.servlet.ServletException;
@@ -18,7 +21,8 @@ public class AloMundoServLet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		PrintWriter writer = response.getWriter();
-		writer.print(" Ola mundo pessoal. = "+generateRandomString());
+		//writer.print(" Ola mundo pessoal. = "+generateRandomString());
+		writer.print(md5("e10adc3949ba59abbe56e057f20f883e"));
 		writer.flush();
 		
 	}
@@ -51,6 +55,19 @@ public class AloMundoServLet extends HttpServlet {
             return randomInt - 1;
         }
     }
+    
+    public static String md5(String senha){
+		String sen = "";
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		BigInteger hash = new BigInteger(1, md.digest(senha.getBytes()));
+		sen = hash.toString(16);			
+		return sen;
+	}
 	
 
 	

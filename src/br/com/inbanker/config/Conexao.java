@@ -1,9 +1,14 @@
 package br.com.inbanker.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 
 
 public class Conexao {
@@ -13,9 +18,17 @@ public class Conexao {
     private static String NOME_BANCO_MONGODB = "inbanker";
 
 	public static Datastore abrirConexao() {
-        MongoClient mongo = new MongoClient(IP_CONEXAO_MONGODB);
+		
+		ServerAddress addr = new ServerAddress("45.55.217.160",32303);
+		List<MongoCredential> credentialsList = new ArrayList<MongoCredential>();
+		MongoCredential credentia = MongoCredential.createCredential(
+		    "appinbanker2017", "admin", "AppAdminInbanker2017#".toCharArray());
+		credentialsList.add(credentia);
+		
+		
+        MongoClient client = new MongoClient(addr,credentialsList);
         Morphia morphia = new Morphia();
-        Datastore datastore = morphia.createDatastore(mongo, NOME_BANCO_MONGODB);
+        Datastore datastore = morphia.createDatastore(client, NOME_BANCO_MONGODB);
         return datastore;
         
     }

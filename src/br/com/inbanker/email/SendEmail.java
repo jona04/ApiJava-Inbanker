@@ -4,6 +4,9 @@ import br.com.inbanker.dao.UsuarioDAO;
 import br.com.inbanker.entidades.Transacao;
 import br.com.inbanker.entidades.Usuario;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.Security;
 import java.util.Properties;
 import java.util.Random;
@@ -30,10 +33,10 @@ public class SendEmail {
 	private static final String CHARSET_UTF8 = ";charset=utf-8";
 	
 	@POST
-	@Path("/mensagem/{mensagem}")
+	@Path("/mensagem/{mensagem}/{assunto}")
 	@Consumes(MediaType.APPLICATION_JSON + CHARSET_UTF8)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String sendEmailMensagem(Usuario usu,@PathParam("mensagem") String mensagem){
+	public String sendEmailMensagem(Usuario usu,@PathParam("mensagem") String mensagem,@PathParam("assunto") String assunto){
 		String resposta = null;
 		 try {
 			Properties props = new Properties();
@@ -60,7 +63,7 @@ public class SendEmail {
                          .parse("atendimento@inbanker.com.br");  
               message.setRecipients(Message.RecipientType.TO, toUser);
               
-              message.setContent(textEmailMensagem(mensagem,usu.getNome(),usu.getEmail(),usu.getCpf()), "text/html; charset=utf-8");
+              message.setContent(textEmailMensagem(mensagem,assunto,usu.getNome(),usu.getEmail(),usu.getCpf()), "text/html; charset=utf-8");
               message.setSubject("Mensagem aplicativo Inbanker");//Assunto
 
               Transport.send(message);
@@ -82,7 +85,7 @@ public class SendEmail {
 		
 		 String nova_senha = generateRandomString();
 		 String edit_senha = null;
-		 usu.setSenha(nova_senha);
+		 usu.setSenha(md5(nova_senha));
 		 try{
 			 UsuarioDAO.novaSenhaUsuarioByCPF(usu);
 			 edit_senha = "ok";
@@ -118,7 +121,7 @@ public class SendEmail {
 	                         .parse(usu.getEmail());  
 	              message.setRecipients(Message.RecipientType.TO, toUser);
 	              
-	              message.setContent(textEmailNovaSenha(usu), "text/html; charset=utf-8");
+	              message.setContent(textEmailNovaSenha(usu,nova_senha), "text/html; charset=utf-8");
 	              message.setSubject("Nova senha InBanker");//Assunto
 	
 	              Transport.send(message);
@@ -222,7 +225,7 @@ public class SendEmail {
                              .parse(email_user1);  
                   message_user1.setRecipients(Message.RecipientType.TO, toUser1);
       			
-                  message_user1.setSubject("Você confirmou o recebimento do valor emprestado");//Assunto
+                  message_user1.setSubject("Voce confirmou o recebimento do valor emprestado");//Assunto
                   message_user1.setContent(textEmailFormalizaContrato(transacao.getNome_usu1(), transacao.getNome_usu2(),transacao.getId_contrato()), "text/html; charset=utf-8");
 
                   /**Método para enviar a mensagem criada*/
@@ -263,7 +266,7 @@ public class SendEmail {
                              .parse(email_user2);  
                   message_user2.setRecipients(Message.RecipientType.TO, toUser2);
       			
-                  message_user2.setSubject("Você confirmou o recebimento do valor para quitação");//Assunto
+                  message_user2.setSubject("Voce confirmou o recebimento do valor para quitação");//Assunto
                   message_user2.setContent(textEmailReciboFinalizado(transacao.getNome_usu2(),transacao.getNome_usu1(),transacao.getId_recibo(),transacao.getId_contrato()), "text/html; charset=utf-8");
                   
                   /**Método para enviar a mensagem criada*/
@@ -388,9 +391,9 @@ public String textEmailFormalizaContrato(String nome1,String nome2,String id_con
 			+"<p> <strong>ID Contrato: "+id_contrato+"</strong></p>"
 			
 			+"<p>Clique no link abaixo para visualizar o Contrato e o Comprovante de recebimento. </p>"
-			+"<p><a href='http://www.inbanker.com.br/contrato/"+id_contrato+"' target='_blank'>Contrato</a> <a href='http://www.inbanker.com.br/recibo/"+id_contrato+"' target='_blank'>Recibo</a></p>"
+			+"<p><a style='background-color: #4CAF50;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display:inline-block;font-size: 16px;margin: 4px 2px;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);cursor: pointer;' href='http://www.inbanker.com.br/contrato/"+id_contrato+"' target='_blank'>Contrato</a> <a style='background-color: #008CBA;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display:inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);' href='http://www.inbanker.com.br/recibo/"+id_contrato+"' target='_blank'>Recibo</a></p>"
 			
-			+"<p>Acompanhe seu contrato pelo aplicativo ou site <a href='http://www.inbanker.com.br' target='_blank'>www.inbanker.com.br/login</a> e deixe conosco a administração do mesmo.</p>"
+			+"<p>Acompanhe seu contrato pelo aplicativo ou site <a href='http://www.inbanker.com.br/login' target='_blank'>www.inbanker.com.br/login</a> e deixe conosco a administração do mesmo.</p>"
 			
 			+"<p>Alguma dúvida? <a href='http://www.inbanker.com.br' target='_blank'>Clique aqui</a>, ou entre em contato com a gente por e-mail, chat ou telefone.</p>"
 			
@@ -420,12 +423,12 @@ public String textEmailFormalizaContrato(String nome1,String nome2,String id_con
 	
 		+"<p>O Contrato de Mútuo com "+nome2+", foi quitado e finalizado através do nosso sistema <strong>InBanker</strong>.</p>"
 	
-		+"<p> <strong>Contrato: "+id_contrato+"</strong><br><strong>Recibo: "+id_recibo+"</strong></p>"
+		+"<p> <strong>Contrato: "+id_contrato+"</strong><br><strong>Recibo de quitação: "+id_recibo+"</strong></p>"
 	
 		+"<p>Clique no link abaixo para visualizar o Contrato e o Comprovante de quitacao. </p>"
-		+"<p><a href='http://www.inbanker.com.br/contrato/"+id_contrato+"' target='_blank'>Contrato</a> <a href='http://www.inbanker.com.br/recibo-quitacao/"+id_recibo+"' target='_blank'>Recibo</a></p>"
+		+"<p><a style='background-color: #4CAF50;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display:inline-block;font-size: 16px;margin: 4px 2px;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);cursor: pointer;' href='http://www.inbanker.com.br/contrato/"+id_contrato+"' target='_blank'>Contrato</a> <a style='background-color: #008CBA;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display:inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);' href='http://www.inbanker.com.br/recibo-quitacao/"+id_recibo+"' target='_blank'>Recibo</a></p>"
 		
-		+"<p>Acompanhe seu contrato pelo aplicativo ou site <a href='http://www.inbanker.com.br' target='_blank'>www.inbanker.com.br/login</a> e deixe conosco a administração do mesmo.</p>"
+		+"<p>Acompanhe seu contrato pelo aplicativo ou site <a href='http://www.inbanker.com.br/login' target='_blank'>www.inbanker.com.br/login</a> e deixe conosco a administração do mesmo.</p>"
 		
 		+"<p>Alguma dúvida? <a href='http://www.inbanker.com.br' target='_blank'>Clique aqui</a>, ou entre em contato com a gente por e-mail, chat ou telefone.</p>"
 		
@@ -445,13 +448,14 @@ public String textEmailFormalizaContrato(String nome1,String nome2,String id_con
 		
 		return texto;
 	} 
-	public String textEmailMensagem(String mensagem,String nome,String email,String cpf){
+	public String textEmailMensagem(String mensagem,String assunto,String nome,String email,String cpf){
 		String texto ="<html>"
 				+"<body style='width: 500px;'>"
 	
 				+"<p>Enviado por: <strong>"+nome+"</strong></p>"
 				+"<p>CPF: <strong>"+cpf+"</strong></p>"
 				+"<p>Email: <strong>"+email+"</strong></p>"
+				+"<p>Assunto: <strong>"+assunto+"</strong></p>"
 	
 		+"<p></p>"
 		+"<p>"+mensagem+"</p>"
@@ -495,7 +499,7 @@ public String textEmailFormalizaContrato(String nome1,String nome2,String id_con
     }
 	    
 	
-	public String textEmailNovaSenha(Usuario usu){
+	public String textEmailNovaSenha(Usuario usu,String nova_senha){
 		String texto ="<html>"
 				+"<body style='width: 500px;'>"
 	
@@ -504,7 +508,7 @@ public String textEmailFormalizaContrato(String nome1,String nome2,String id_con
 		+"<p></p>"
 	
 		+"<p>Foi solicitado uma nova senha através do aplicativo InBanker com o seu CPF.</p>"
-		+"<p>Nova senha:<strong>"+ usu.getSenha() +"</strong</p>"
+		+"<p>Nova senha:<strong>"+ nova_senha +"</strong</p>"
 		
 		+"<p></p>"
 		+"<p>Recomendamos ao entrar no aplicativo, por questões de segurança, alterar a nova senha gerada.</p>"
@@ -512,12 +516,25 @@ public String textEmailFormalizaContrato(String nome1,String nome2,String id_con
 		
 		+"<div style='border: solid gray;margin-top: 50px;padding: 5px'>"
 			+"<img src='https://s10.postimg.org/oclpysywp/Captura_de_Tela_2017_03_20_s_10_51_33.png' style='float: left; width:40px;padding:10px'>"
-			+"<p style=''>Mantenha sempre seus dados em segurança, não revele seus dados de acesso à ninguém. Nós nunca pediremos sua senha. Caso suspeite que alguém esteja usando sua conta, entre em contato conosco imediatamente.</p>"
+			+"<p>Mantenha sempre seus dados em segurança, não revele seus dados de acesso à ninguém. Nós nunca pediremos sua senha. Caso suspeite que alguém esteja usando sua conta, entre em contato conosco imediatamente.</p>"
 		+"</div>"
 		+"<p style='color: gray;font-size: 12x' align='center'>Esse email é automático e não deve ser respondido</p>"
 		+"</body>"
 		+"</html>";
 		
 		return texto;
+	}
+	
+	public static String md5(String senha){
+		String sen = "";
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		BigInteger hash = new BigInteger(1, md.digest(senha.getBytes()));
+		sen = hash.toString(16);			
+		return sen;
 	}
 }

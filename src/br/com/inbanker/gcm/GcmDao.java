@@ -34,6 +34,7 @@ public class GcmDao {
         msgObject.put("msg", message);
         msgObject.put("title", title);
         msgObject.put("tipo", tipo);
+        msgObject.put("icon","icon");
        // msgObject.put("icon", ANDROID_NOTIFICATION_ICON);
        // msgObject.put("color", ANDROID_NOTIFICATION_COLOR);
 
