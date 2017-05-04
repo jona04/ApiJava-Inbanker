@@ -14,12 +14,40 @@ public class Recibo {
     private String cpf_usu1;
     private String cpf_usu2;
     private String valor;
+    private String valor_servico;
+    private String valor_juros_mora;
+    private String valor_juros_mensal;
+    private String valor_multa;
     private String vencimento;
     private String data_pedido;
     private String data_confirma_quitacao;
     private String nome_usu2;
     private String nome_usu1;
     
+	public String getValor_servico() {
+		return valor_servico;
+	}
+	public void setValor_servico(String valor_servico) {
+		this.valor_servico = valor_servico;
+	}
+	public String getValor_juros_mora() {
+		return valor_juros_mora;
+	}
+	public void setValor_juros_mora(String valor_juros_mora) {
+		this.valor_juros_mora = valor_juros_mora;
+	}
+	public String getValor_juros_mensal() {
+		return valor_juros_mensal;
+	}
+	public void setValor_juros_mensal(String valor_juros_mensal) {
+		this.valor_juros_mensal = valor_juros_mensal;
+	}
+	public String getValor_multa() {
+		return valor_multa;
+	}
+	public void setValor_multa(String valor_multa) {
+		this.valor_multa = valor_multa;
+	}
 	public String getId_trans() {
 		return id_trans;
 	}

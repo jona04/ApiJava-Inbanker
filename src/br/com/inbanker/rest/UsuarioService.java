@@ -443,6 +443,10 @@ public class UsuarioService {
 				recibo.setCpf_usu1(trans.getCpf_usu1());
 				recibo.setCpf_usu2(trans.getCpf_usu2());
 				recibo.setValor(trans.getValor());
+				recibo.setValor_servico(trans.getValor_servico());
+				recibo.setValor_juros_mensal(trans.getValor_juros_mensal());
+				recibo.setValor_juros_mora(trans.getValor_juros_mora());
+				recibo.setValor_multa(trans.getValor_multa());
 				recibo.setVencimento(trans.getVencimento());
 				recibo.setData_pedido(trans.getData_pedido());
 				recibo.setData_confirma_quitacao((trans.getHistorico().get(trans.getHistorico().size()-1).getData()));

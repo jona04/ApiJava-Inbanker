@@ -391,9 +391,8 @@ public String textEmailFormalizaContrato(String nome1,String nome2,String id_con
 			+"<p> <strong>ID Contrato: "+id_contrato+"</strong></p>"
 			
 			+"<p>Clique no link abaixo para visualizar o Contrato e o Comprovante de recebimento. </p>"
-			+"<p><a style='background-color: #4CAF50;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display:inline-block;font-size: 16px;margin: 4px 2px;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);cursor: pointer;' href='http://www.inbanker.com.br/contrato/"+id_contrato+"' target='_blank'>Contrato</a> <a style='background-color: #008CBA;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display:inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);' href='http://www.inbanker.com.br/recibo/"+id_contrato+"' target='_blank'>Recibo</a></p>"
+			+"<p><a style='background-color: #4CAF50;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display:inline-block;font-size: 16px;margin: 4px 2px;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);cursor: pointer;' href='http://www.inbanker.com/contrato/"+id_contrato+"' target='_blank'>Contrato</a> <a style='background-color: #008CBA;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display:inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);' href='http://www.inbanker.com/recibo/"+id_contrato+"' target='_blank'>Recibo</a></p>"
 			
-			+"<p>Acompanhe seu contrato pelo aplicativo ou site <a href='http://www.inbanker.com.br/login' target='_blank'>www.inbanker.com.br/login</a> e deixe conosco a administração do mesmo.</p>"
 			
 			+"<p>Alguma dúvida? <a href='http://www.inbanker.com.br' target='_blank'>Clique aqui</a>, ou entre em contato com a gente por e-mail, chat ou telefone.</p>"
 			
@@ -426,9 +425,8 @@ public String textEmailFormalizaContrato(String nome1,String nome2,String id_con
 		+"<p> <strong>Contrato: "+id_contrato+"</strong><br><strong>Recibo de quitação: "+id_recibo+"</strong></p>"
 	
 		+"<p>Clique no link abaixo para visualizar o Contrato e o Comprovante de quitacao. </p>"
-		+"<p><a style='background-color: #4CAF50;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display:inline-block;font-size: 16px;margin: 4px 2px;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);cursor: pointer;' href='http://www.inbanker.com.br/contrato/"+id_contrato+"' target='_blank'>Contrato</a> <a style='background-color: #008CBA;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display:inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);' href='http://www.inbanker.com.br/recibo-quitacao/"+id_recibo+"' target='_blank'>Recibo</a></p>"
+		+"<p><a style='background-color: #4CAF50;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display:inline-block;font-size: 16px;margin: 4px 2px;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);cursor: pointer;' href='http://www.inbanker.com/contrato/"+id_contrato+"' target='_blank'>Contrato</a> <a style='background-color: #008CBA;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display:inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);' href='http://www.inbanker.com/recibo-quitacao/"+id_recibo+"' target='_blank'>Recibo</a></p>"
 		
-		+"<p>Acompanhe seu contrato pelo aplicativo ou site <a href='http://www.inbanker.com.br/login' target='_blank'>www.inbanker.com.br/login</a> e deixe conosco a administração do mesmo.</p>"
 		
 		+"<p>Alguma dúvida? <a href='http://www.inbanker.com.br' target='_blank'>Clique aqui</a>, ou entre em contato com a gente por e-mail, chat ou telefone.</p>"
 		
